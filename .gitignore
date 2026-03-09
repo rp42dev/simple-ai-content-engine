@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Test / coverage / build
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# Runtime logs and temp
+*.log
+tmp/**
+!tmp/pdfs/
+!tmp/pdfs/*.py
+
+# Generated engine artifacts
+output/**
+outputs/*.md
+outputs/*.json
+!outputs/__init__.py
+
+# Runtime state and queue
+state/workflow_*.json
+topics_queue.json
+topics_queue.txt
+
+# Notebook checkpoints
+.ipynb_checkpoints/

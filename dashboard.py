@@ -1,0 +1,417 @@
+import streamlit as st
+import os
+import json
+import re
+from pathlib import Path
+import time
+import subprocess
+
+from tools.wordpress_tool import post_to_wordpress
+from tools.state_manager import load_state, save_state
+
+st.set_page_config(
+    page_title="Content Engine",
+    layout="wide",
+    page_icon="⚙",
+    initial_sidebar_state="collapsed"
+)
+
+def load_css():
+    with open("style.css") as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+load_css()
+
+# ─────────────────────────────────────────────
+# HELPERS
+# ─────────────────────────────────────────────
+def get_safe_name(s):
+    return re.sub(r'[^a-zA-Z0-9]', '_', s.lower())
+
+def load_queue():
+    p = "topics_queue.json"
+    if os.path.exists(p):
+        with open(p, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
+def save_queue(q):
+    with open("topics_queue.json", "w", encoding="utf-8") as f:
+        json.dump(q, f, indent=2)
+
+def load_topic_state(topic):
+    Path("state").mkdir(exist_ok=True)
+    sf = Path(f"state/workflow_{get_safe_name(topic)}.json")
+    return json.loads(sf.read_text()) if sf.exists() else {"topic": topic}
+
+def save_topic_state(topic, state):
+    sf = Path(f"state/workflow_{get_safe_name(topic)}.json")
+    sf.write_text(json.dumps(state, indent=2))
+
+def parse_blueprint(topic):
+    """Returns (data_dict, error_str)."""
+    bf = f"outputs/{get_safe_name(topic)}_cluster.json"
+    if not os.path.exists(bf):
+        return None, None
+    try:
+        raw = Path(bf).read_text(encoding="utf-8").strip()
+        clean = re.sub(r'^```[a-z]*\n', '', raw).strip("`")
+        return json.loads(clean), None
+    except Exception as e:
+        return None, str(e)
+
+def run_engine(cmd_args, session_ph, table_ph=None):
+    """Blocking subprocess runner with real-time status updates."""
+    env = os.environ.copy()
+    env["PYTHONUTF8"] = "1"
+    env["PYTHONUNBUFFERED"] = "1"
+    
+    process = subprocess.Popen(
+        cmd_args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+        env=env
+    )
+    
+    error_log = []
+    last_table_res = 0.0
+    
+    try:
+        if process.stdout:
+            while True:
+                lb = process.stdout.readline()
+                if not lb and process.poll() is not None:
+                    break
+                
+                if lb:
+                    line = lb.decode("utf-8", errors="replace").strip()
+                    error_log.append(line)
+                    if len(error_log) > 20:
+                        error_log.pop(0)
+
+                    # ── Stdout → session state parser ──
+                    if "Phase 1" in line:
+                        st.session_state.phase = "PHASE 1  —  STRATEGY"
+                        st.session_state.article = ""
+                        st.session_state.agent_stage = "Building topic cluster..."
+                    elif "Phase 2" in line:
+                        st.session_state.phase = "PHASE 2  —  PILLAR"
+                        st.session_state.agent_stage = ""
+                    elif "Phase 3" in line:
+                        st.session_state.phase = "PHASE 3  —  SPOKES"
+                        st.session_state.agent_stage = "Writing spoke articles..."
+                    elif "Phase 4" in line:
+                        st.session_state.phase = "PHASE 4  —  SEO"
+                        st.session_state.agent_stage = "Optimizing articles..."
+                    elif "Phase 5" in line:
+                        st.session_state.phase = "PHASE 5  —  INTELLIGENCE"
+                        st.session_state.agent_stage = "Running content gap detection..."
+                    elif "Phase 6" in line:
+                        st.session_state.phase = "PHASE 6  —  SCALING"
+                        st.session_state.agent_stage = "Applying scaling rules..."
+                    elif "Phase 7" in line:
+                        st.session_state.phase = "PHASE 7  —  LINK INJECTION"
+                        st.session_state.agent_stage = "Injecting internal links..."
+                    elif "Writing Pillar:" in line:
+                        title = line.split("Writing Pillar:")[-1].strip().rstrip(".")
+                        st.session_state.article = f"Pillar: {title}"
+                        st.session_state.agent_stage = "Starting pillar article..."
+                    elif "Writing Spoke" in line:
+                        m = re.search(r'Spoke \((\d+/\d+)\):\s*(.+)', line)
+                        if m:
+                            prog, title = m.group(1), m.group(2).strip().rstrip(".")
+                            st.session_state.article = f"Spoke ({prog}): {title}"
+                            st.session_state.agent_stage = "Writing..."
+                    elif "Batch limit" in line:
+                        st.session_state.agent_stage = "Batch limit reached — wrapping up."
+                    elif "SEO Analysis:" in line:
+                        fname = line.split("SEO Analysis:")[-1].strip()
+                        st.session_state.article = f"Optimising: {fname}"
+                    elif "Skipping" in line:
+                        st.session_state.agent_stage = "Skipping (already done)"
+                    # Capture CrewAI agent chatter
+                    elif line.startswith("Agent:") or "Working Agent:" in line:
+                        st.session_state.agent_stage = line[:80]
+                    elif line.startswith("Task:") or "Current Task:" in line:
+                        st.session_state.agent_stage = f"Task: {line[5:60]}..."
+
+                    render_status(session_ph, running=True)
+                    
+                    if table_ph and time.time() - last_table_res > 3.0:
+                        try:
+                            render_table(table_ph)
+                            last_table_res = time.time()
+                        except:
+                            pass
+        
+        process.wait()
+        return process.returncode, error_log
+    finally:
+        if process.poll() is None:
+            process.terminate()
+            process.wait()
+            st.session_state.is_running = False
+
+def render_status(ph, running=False):
+    phase   = st.session_state.get("phase", "IDLE")
+    topic   = st.session_state.get("active_topic", "—")
+    article = st.session_state.get("article", "")
+    agent   = st.session_state.get("agent_stage", "")
+    thinking_html = "<div class='thinking'>PROCESSING</div>" if running else ""
+
+    with ph.container():
+        st.markdown(f"""
+            <div class="status-card">
+                <div class="s-phase">{phase}</div>
+                <div class="s-topic">{topic}</div>
+                {"<div class='s-article'>" + article + "</div>" if article else ""}
+                {"<div class='s-agent'>" + agent + "</div>" if agent else ""}
+                {thinking_html}
+            </div>
+        """, unsafe_allow_html=True)
+
+def render_table(ph):
+    import pandas as pd
+    rows = []
+    for item in load_queue():
+        topic = item["topic"]
+        state = load_topic_state(topic)
+        d = state.get("spokes_completed", 0)
+        t = state.get("spokes_total", "?")
+
+        if state.get("pillar_written") and state.get("spokes_written"):
+            prod = "COMPLETE"
+        elif state.get("cluster_approved"):
+            prod = f"WRITING SPOKES ({d}/{t})" if state.get("pillar_written") else "WRITING PILLAR"
+        elif state.get("cluster_generated"):
+            prod = "AWAITING APPROVAL"
+        else:
+            prod = "PENDING"
+
+        rows.append({
+            "TOPIC": topic,
+            "STRATEGY": "DONE" if state.get("cluster_generated") else "—",
+            "PRODUCTION": prod,
+            "SEO": "DONE" if state.get("seo_optimized") else "—",
+            "LINKS": "DONE" if state.get("links_injected") else "—",
+            "PROGRESS": f"{int(sum(1 for k in ['cluster_generated','pillar_written','spokes_written','seo_optimized','links_injected'] if state.get(k))/5*100)}%"
+        })
+    ph.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+
+# ─────────────────────────────────────────────
+# SESSION STATE INIT
+# ─────────────────────────────────────────────
+for k, v in [("phase","IDLE"),("active_topic","NO ACTIVE TOPIC"),
+              ("article",""),("agent_stage",""),("is_running",False)]:
+    if k not in st.session_state:
+        st.session_state[k] = v
+
+# ─────────────────────────────────────────────
+# SIDEBAR
+# ─────────────────────────────────────────────
+with st.sidebar:
+    st.caption("ENGINE SETTINGS")
+    batch_limit = st.slider("LIMIT", 1, 10, 2)
+
+    st.divider()
+    st.caption("ADD TOPIC")
+    n_topic = st.text_input("TOPIC", placeholder="Dental Implants")
+    n_url   = st.text_input("URL", placeholder="Competitor URL")
+    n_prio  = st.selectbox("PRIORITY", ["high","medium","low"], index=1)
+    if st.button("ADD TO QUEUE", use_container_width=True):
+        if n_topic:
+            q = load_queue()
+            q.append({"topic": n_topic, "competitor_url": n_url, "priority": n_prio})
+            save_queue(q)
+            st.success(f"ADDED")
+            time.sleep(0.8); st.rerun()
+
+    st.divider()
+    if st.button("WIPE QUEUE", use_container_width=True):
+        save_queue([]); st.rerun()
+
+# ─────────────────────────────────────────────
+# MAIN LAYOUT
+# ─────────────────────────────────────────────
+st.title("CONTENT ENGINE")
+st.markdown("<br>", unsafe_allow_html=True)
+
+# Status Placeholder
+session_ph = st.empty()
+render_status(session_ph)
+
+queue  = load_queue()
+topics = [item["topic"] for item in queue]
+
+if not topics:
+    st.caption("QUEUE EMPTY — ADD A TOPIC IN THE SIDEBAR")
+else:
+    # ── Step 1: Run Controls ──
+    rc1, rc2, rc3 = st.columns([2.5, 1, 1])
+    with rc1:
+        target = st.selectbox("TARGET", topics, label_visibility="collapsed")
+    
+    target_state = load_topic_state(target)
+    bp_data, bp_err = parse_blueprint(target)
+    
+    with rc2:
+        needs_approval = bp_data and not target_state.get("cluster_approved")
+        if needs_approval:
+            approve_checked = st.checkbox("AUTHORIZE", value=False, help="Check to authorize strategy and start production")
+        else:
+            approve_checked = False
+            if target_state.get("cluster_approved"):
+                st.markdown("<div style='margin-top:0.4rem; color:#8b949e; font-size:0.8rem;'>✓ AUTHORIZED</div>", unsafe_allow_html=True)
+                
+    with rc3:
+        start_btn = st.button("EXECUTE RUN", use_container_width=True, type="primary")
+        autopilot_mode = st.toggle("AUTOPILOT", value=st.session_state.get("autopilot", False), help="Automatically loop through all pending topics")
+        if autopilot_mode != st.session_state.get("autopilot"):
+            st.session_state.autopilot = autopilot_mode
+            if autopilot_mode:
+                st.rerun()
+
+    # ── Auto-Select Next Topic for Autopilot ──
+    if st.session_state.get("autopilot") and not start_btn:
+        next_target = None
+        for t in topics:
+            t_state = load_topic_state(t)
+            is_done = t_state.get("pillar_written") and t_state.get("spokes_written") and t_state.get("seo_optimized") and t_state.get("links_injected")
+            if not is_done:
+                next_target = t
+                break
+        
+        # If there's a pending target, simulate a start click for it
+        if next_target:
+            target = next_target
+            target_state = load_topic_state(target)
+            approve_checked = True  # Auto-approve in autopilot
+            start_btn = True
+        else:
+            st.session_state.autopilot = False
+            st.session_state.phase = "QUEUE COMPLETED"
+            render_status(session_ph)
+
+    # ── Step 1: Strategy Blueprint immediately below run controls ──
+    if bp_data:
+        spokes = bp_data.get("spoke_topics", [])
+        spoke_labels = []
+        for s in spokes:
+            label = s.get("title") or s.get("topic") or s.get("sub_topic","?")
+            spoke_labels.append(label)
+
+        with st.expander("STRATEGY BLUEPRINT", expanded=needs_approval):
+            st.markdown(f"""
+                <div class="blueprint-card">
+                    <div class="pillar-label">PILLAR ARTICLE</div>
+                    <div class="pillar-title">{bp_data.get('pillar_topic','')}</div>
+                    <div class="pillar-label">SPOKE ARTICLES  ({len(spokes)})</div>
+                    {"".join(f"<div>· {s}</div>" for s in spoke_labels)}
+                </div>
+            """, unsafe_allow_html=True)
+    elif bp_err:
+        st.caption(f"BLUEPRINT ERROR: {bp_err}")
+    else:
+        st.caption("STRATEGY NOT YET GENERATED — RUN PHASE 1 FIRST")
+
+    # ── Pipeline Status Table (Fragment) ──
+    st.divider()
+    table_ph = st.empty()
+
+    @st.fragment(run_every="5s")
+    def table_fragment():
+        render_table(table_ph)
+        
+    table_fragment()
+
+    # ── Execution ──
+    if start_btn:
+        if approve_checked:
+            target_state["cluster_approved"] = True
+            save_topic_state(target, target_state)
+            
+
+        st.session_state.is_running = True
+        st.session_state.active_topic = target
+        st.session_state.phase = "INITIALIZING"
+        st.session_state.article = ""
+        st.session_state.agent_stage = ""
+
+        # ── Kill Switch UI ──
+        stop_ph = st.empty()
+        # If the user clicks STOP during autopilot, it will reload the script, 
+        # but since process runs in background, we just terminate it inside `run_engine` finally block when stopped.
+        if stop_ph.button("🚨 STOP ENTIRE RUN", use_container_width=True, help="Click to immediately abort the engine"):
+            st.session_state.autopilot = False
+            st.rerun()
+
+        cmd_args = [".venv\\Scripts\\python", "main.py", "--topic", target, "--limit", str(batch_limit)]
+        code, err_log = run_engine(cmd_args, session_ph, table_ph=table_ph)
+        
+        stop_ph.empty() # Remove the stop button once done
+
+        st.session_state.is_running = False
+        if code == 0:
+            st.session_state.phase = "COMPLETED"
+            st.session_state.article = ""
+            st.session_state.agent_stage = ""
+            render_status(session_ph)
+            time.sleep(1); st.rerun()
+        else:
+            st.session_state.autopilot = False # Abort autopilot if crashed
+            st.session_state.phase = "FINISHED WITH ERRORS"
+            st.session_state.article = "Run aborted or crashed"
+            st.session_state.agent_stage = "Check traceback below"
+            render_status(session_ph)
+            st.error("ENGINE CRASH TRACEBACK")
+            st.code("\n".join(err_log), language="text")
+
+    # ─────────────────────────────────────────
+    # TOPIC MANAGEMENT (below status table)
+    # ─────────────────────────────────────────
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.subheader("TOPIC MANAGEMENT")
+    m_target = st.selectbox("MANAGE TARGET", topics, label_visibility="collapsed", key="manage_sel")
+
+    if m_target:
+        m_state = load_topic_state(m_target)
+
+        # Action buttons
+        ac1, ac2, ac3 = st.columns(3)
+        with ac1:
+            if st.button("RESET STATE", use_container_width=True):
+                save_topic_state(m_target, {"topic": m_target}); st.rerun()
+        with ac2:
+            if st.button("DELETE FROM QUEUE", use_container_width=True, type="secondary"):
+                save_queue([i for i in queue if i["topic"] != m_target]); st.rerun()
+        with ac3:
+            if st.button("PUBLISH TO CMS", use_container_width=True):
+                st.info("CMS PUBLISHING — NOT CONFIGURED")
+
+        # Artifacts — match pillar files AND spoke files from cluster
+        st.markdown("<br>", unsafe_allow_html=True)
+        safe = get_safe_name(m_target)
+        if os.path.exists("outputs"):
+            all_md = [f for f in os.listdir("outputs") if f.endswith(".md")]
+            
+            # Always include files with the parent topic slug
+            matched = [f for f in all_md if safe in f.lower()]
+            
+            # Also pull in spoke files via the cluster blueprint
+            m_bp_data, _ = parse_blueprint(m_target)
+            if m_bp_data:
+                for spoke in m_bp_data.get("spoke_topics", []):
+                    s_name = spoke.get("title") or spoke.get("topic") or spoke.get("sub_topic","")
+                    if s_name:
+                        s_safe = get_safe_name(s_name)
+                        for f in all_md:
+                            if f.startswith("spoke_") and s_safe in f and f not in matched:
+                                matched.append(f)
+            
+            files = sorted(matched)
+            if files:
+                f_sel = st.selectbox("ARTIFACT", files, label_visibility="collapsed")
+                with open(f"outputs/{f_sel}", "r", encoding="utf-8", errors="replace") as f:
+                    text = f.read()
+                st.divider()
+                st.markdown(text)
+            else:
+                st.caption("NO ARTIFACTS YET")
+
