@@ -49,4 +49,8 @@ Always test in this order:
 - `docs/ARCHITECTURE.md`
 - `docs/ROADMAP.md`
 - `docs/DEV_RULES.md`
+- `docs/RELEASE_CHECKLIST.md`
 - `CHANGELOG.md`
+
+## Team Workflow Files
+- PR template: `.github/pull_request_template.md`
