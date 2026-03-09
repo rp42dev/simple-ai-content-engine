@@ -17,6 +17,7 @@ and this project uses a release-style version history starting from the current 
 - Incremental testing protocol in `docs/DEV_RULES.md` with required PR fields:
   - `Tested now`
   - `Recommended next test`
+- Optional Phase 5 intelligence memory integration (feature flag: `CREWAI_INTELLIGENCE_MEMORY_ENABLED`) with topic-scoped recall/save behavior.
 
 ### Changed
 - `main.py` is now a thin CLI entrypoint delegating orchestration to `engine.pipeline.runner`.

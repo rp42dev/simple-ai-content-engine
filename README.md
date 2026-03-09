@@ -34,6 +34,16 @@ This repo includes a safe CrewAI Flow integration spike behind env flags.
 
 Current behavior is intentionally non-breaking: spike mode logs flow/memory path activation and runs the same stable phase runner underneath.
 
+### Optional Intelligence Memory (Phase 5)
+- Enable intelligence-only memory:
+  - PowerShell: `$env:CREWAI_INTELLIGENCE_MEMORY_ENABLED="1"`
+
+Behavior:
+- Applies only to Phase 5 (Content Gap Detection).
+- Recalls prior intelligence context from scoped memory path: `/topic/<topic_slug>/intelligence`.
+- Stores newly extracted intelligence facts back into that same scope.
+- If memory dependencies/keys are unavailable, pipeline continues safely without memory.
+
 ## Dashboard (Temporary Ops UI)
 - Run Streamlit monitor/control UI:
   - `streamlit run dashboard.py`
