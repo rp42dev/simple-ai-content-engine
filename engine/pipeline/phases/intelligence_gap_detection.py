@@ -41,6 +41,7 @@ def _build_cluster_context_with_memory(topic_slug, cluster_info):
         if not lines:
             return cluster_info
 
+        print(f"[Intelligence Memory] Recalled {len(lines)} prior insights from memory")
         prior_context = "\n".join([f"- {line}" for line in lines])
         return (
             f"{cluster_info}\n\n"
