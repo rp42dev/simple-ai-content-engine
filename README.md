@@ -24,6 +24,26 @@ AI Content Engine is a CrewAI-based pipeline for generating SEO content clusters
 - Single topic:
   - `python main.py --topic "Invisalign" --limit 2`
 
+## Flow Spike (Feature Flag)
+This repo includes a safe CrewAI Flow integration spike behind env flags.
+
+- Enable flow spike path:
+  - PowerShell: `$env:CREWAI_FLOW_SPIKE_ENABLED="1"`
+- Optional memory flag for spike validation path:
+  - PowerShell: `$env:CREWAI_FLOW_MEMORY_ENABLED="1"`
+
+Current behavior is intentionally non-breaking: spike mode logs flow/memory path activation and runs the same stable phase runner underneath.
+
+### Optional Intelligence Memory (Phase 5)
+- Enable intelligence-only memory:
+  - PowerShell: `$env:CREWAI_INTELLIGENCE_MEMORY_ENABLED="1"`
+
+Behavior:
+- Applies only to Phase 5 (Content Gap Detection).
+- Recalls prior intelligence context from scoped memory path: `/topic/<topic_slug>/intelligence`.
+- Stores newly extracted intelligence facts back into that same scope.
+- If memory dependencies/keys are unavailable, pipeline continues safely without memory.
+
 ## Dashboard (Temporary Ops UI)
 - Run Streamlit monitor/control UI:
   - `streamlit run dashboard.py`
@@ -45,8 +65,16 @@ Always test in this order:
 3. Batch test: two or more topics with priorities
 4. Regression test: rerun completed topic and confirm skip/idempotent behavior
 
+Recommended spike smoke commands:
+- Baseline: `python main.py --topic "__smoke_nonexistent_topic__" --limit 1`
+- Flow flag path: set `CREWAI_FLOW_SPIKE_ENABLED=1` then rerun baseline command
+
 ## Docs
 - `docs/ARCHITECTURE.md`
 - `docs/ROADMAP.md`
 - `docs/DEV_RULES.md`
+- `docs/RELEASE_CHECKLIST.md`
 - `CHANGELOG.md`
+
+## Team Workflow Files
+- PR template: `.github/pull_request_template.md`
