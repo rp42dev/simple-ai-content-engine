@@ -1,6 +1,6 @@
 import argparse
 
-from engine.pipeline.runner import run_pipeline
+from engine.pipeline.flow_spike import run_pipeline_entry
 
 
 def main():
@@ -9,7 +9,7 @@ def main():
     parser.add_argument("--limit", type=int, default=2, help="Max spokes to write per topic")
     args = parser.parse_args()
 
-    run_pipeline(topic=args.topic, limit=args.limit)
+    run_pipeline_entry(topic=args.topic, limit=args.limit)
 
 
 if __name__ == "__main__":

@@ -24,6 +24,16 @@ AI Content Engine is a CrewAI-based pipeline for generating SEO content clusters
 - Single topic:
   - `python main.py --topic "Invisalign" --limit 2`
 
+## Flow Spike (Feature Flag)
+This repo includes a safe CrewAI Flow integration spike behind env flags.
+
+- Enable flow spike path:
+  - PowerShell: `$env:CREWAI_FLOW_SPIKE_ENABLED="1"`
+- Optional memory flag for spike validation path:
+  - PowerShell: `$env:CREWAI_FLOW_MEMORY_ENABLED="1"`
+
+Current behavior is intentionally non-breaking: spike mode logs flow/memory path activation and runs the same stable phase runner underneath.
+
 ## Dashboard (Temporary Ops UI)
 - Run Streamlit monitor/control UI:
   - `streamlit run dashboard.py`
@@ -44,6 +54,10 @@ Always test in this order:
 2. Path test: rerun affected contiguous phases and confirm resumability
 3. Batch test: two or more topics with priorities
 4. Regression test: rerun completed topic and confirm skip/idempotent behavior
+
+Recommended spike smoke commands:
+- Baseline: `python main.py --topic "__smoke_nonexistent_topic__" --limit 1`
+- Flow flag path: set `CREWAI_FLOW_SPIKE_ENABLED=1` then rerun baseline command
 
 ## Docs
 - `docs/ARCHITECTURE.md`
