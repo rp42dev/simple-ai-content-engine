@@ -7,6 +7,25 @@ and this project uses a release-style version history starting from the current 
 
 ## [Unreleased]
 
+## [0.3.0-beta.1] - 2026-03-09
+
+### Added
+- **Flow/Memory spike** with feature-flagged adoption:
+  - `engine/pipeline/flow_spike.py`: Safe Flow orchestration adapter with graceful fallback to stable runner (`CREWAI_FLOW_SPIKE_ENABLED`).
+  - Scoped memory integration for Phase 5 (Intelligence) with topic-specific recall/save under `/topic/{slug}/intelligence` scope (`CREWAI_INTELLIGENCE_MEMORY_ENABLED`).
+  - Optional log line showing recalled prior insights count per Phase 5 execution for faster parity checks.
+- Release governance documentation:
+  - `.github/pull_request_template.md`: PR checklist enforcing phase testing and docs updates.
+  - `docs/RELEASE_CHECKLIST.md`: Step-by-step release validation workflow.
+- Git workflow initialized with branching model (`main`, `dev`, `feature/*`) and incremental version tags.
+
+### Validated
+- Memory accumulation: 13 discrete intelligence facts persisted and recalled across two Phase 5 runs on real topic (Invisalign).
+- Baseline pipeline parity: No regressions with Flow/Memory flags disabled; identical outputs confirmed.
+- Graceful degradation: Memory recall/save operations fail safely with no pipeline disruption.
+
+## [0.2.0] (previously Unreleased)
+
 ### Added
 - Baseline `.gitignore` for Python envs, caches, generated artifacts, and runtime state files.
 - Basic project `README.md` with run instructions and incremental testing workflow.
@@ -17,7 +36,6 @@ and this project uses a release-style version history starting from the current 
 - Incremental testing protocol in `docs/DEV_RULES.md` with required PR fields:
   - `Tested now`
   - `Recommended next test`
-- Optional Phase 5 intelligence memory integration (feature flag: `CREWAI_INTELLIGENCE_MEMORY_ENABLED`) with topic-scoped recall/save behavior.
 
 ### Changed
 - `main.py` is now a thin CLI entrypoint delegating orchestration to `engine.pipeline.runner`.
