@@ -1,0 +1,84 @@
+{
+  "phrase_rewrites": [
+    {
+      "source": "Dental implants are steadily becoming one of the most trusted methods for tooth replacement, thanks to their durability and how closely they mimic natural teeth.",
+      "replacement": "Dental implants have become one of the most trusted tooth replacement options due to their durability and close resemblance to natural teeth.",
+      "reason": "Simpler phrasing and removes slightly repetitive 'steadily becoming' and 'thanks to'."
+    },
+    {
+      "source": "Many patients in our local area have found dental implants to be a life-changing option, supported by experienced implant dentists and modern technology available nearby.",
+      "replacement": "Many local patients have found dental implants life-changing, with support from experienced dentists and modern technology.",
+      "reason": "Shortens sentence and improves flow."
+    },
+    {
+      "source": "An implant-supported tooth typically consists of three parts:",
+      "replacement": "An implant-supported tooth has three parts:",
+      "reason": "Shorter and more direct."
+    },
+    {
+      "source": "Unlike bridges or dentures, dental implants don\u2019t rely on neighboring teeth for support. This means they maintain the health of your remaining teeth and provide a stable, secure bite that feels like your natural teeth.",
+      "replacement": "Unlike bridges or dentures, dental implants don\u2019t depend on nearby teeth. This helps keep your other teeth healthy and provides a stable, natural-feeling bite.",
+      "reason": "Simplifies and improves readability."
+    },
+    {
+      "source": "Many patients worry about pain and recovery, but thanks to modern surgical techniques and effective pain management, discomfort is typically minimal, and recovery times are quicker than ever.",
+      "replacement": "While some patients worry about pain and recovery, modern surgery and pain control keep discomfort minimal and healing faster than before.",
+      "reason": "More natural phrasing and avoids marketing clich\u00e9s."
+    },
+    {
+      "source": "This allows us to create a personalized treatment plan tailored to your needs and answer your questions in detail.",
+      "replacement": "This lets us create a treatment plan just for you and answer your questions fully.",
+      "reason": "Shorter and more conversational."
+    },
+    {
+      "source": "Endosteal Implants: These are screw-shaped implants placed directly into the jawbone. They\u2019re the most widely used type.",
+      "replacement": "Endosteal Implants: Screw-shaped implants placed directly into the jawbone. They are the most common type.",
+      "reason": "Shortens and removes contraction for formality."
+    },
+    {
+      "source": "Subperiosteal Implants: These are placed under the gum but above the bone, used mainly when jawbone volume is insufficient for endosteal implants without bone grafting.",
+      "replacement": "Subperiosteal Implants: Placed under the gum but above the bone, usually for patients without enough jawbone volume for endosteal implants.",
+      "reason": "Simplifies and shortens sentence."
+    },
+    {
+      "source": "Modern techniques focus on minimizing discomfort and promoting quick healing.",
+      "replacement": "Modern methods aim to reduce discomfort and speed healing.",
+      "reason": "Simplifies phrasing."
+    },
+    {
+      "source": "Minimally invasive methods have made this process more comfortable and reduced recovery times.",
+      "replacement": "Less invasive methods have made the process more comfortable and cut recovery times.",
+      "reason": "More direct and simpler wording."
+    },
+    {
+      "source": "Cost is a common concern, so it\u2019s important to understand what influences the price of dental implants.",
+      "replacement": "Cost is a common concern, so it's helpful to know what affects the price of dental implants.",
+      "reason": "More natural phrasing."
+    },
+    {
+      "source": "Since treatment is highly personalized, we recommend discussing your specific situation during a consultation for transparent pricing.",
+      "replacement": "As treatment varies, we recommend a consultation to discuss your case and pricing clearly.",
+      "reason": "Shortens and improves flow."
+    },
+    {
+      "source": "Your implant dentist will evaluate your medical and dental history to confirm you\u2019re a good candidate and help reduce these risks.",
+      "replacement": "Your dentist will review your health and dental history to ensure you\u2019re a good candidate and to minimize risks.",
+      "reason": "Simplifies phrasing."
+    },
+    {
+      "source": "Initial healing takes a few days; full bone integration requires 3-6 months. Most return to normal activities quickly.",
+      "replacement": "Healing takes a few days, while full bone integration takes 3-6 months. Most people return to normal activities quickly.",
+      "reason": "More natural and clear sentence structure."
+    },
+    {
+      "source": "Dental implants offer a dependable, natural-looking way to replace missing teeth and significantly improve your quality of life.",
+      "replacement": "Dental implants provide a reliable, natural-looking way to replace missing teeth and improve your quality of life.",
+      "reason": "Slightly more concise."
+    },
+    {
+      "source": "Choosing an experienced local dental team ensures you receive personalized care and support tailored to your individual needs.",
+      "replacement": "Working with an experienced local dental team means you get care and support tailored to you.",
+      "reason": "Simplifies language."
+    }
+  ]
+}

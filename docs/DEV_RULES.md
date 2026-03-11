@@ -4,6 +4,14 @@ This document defines how to build safely in an AI-assisted workflow while prote
 
 ---
 
+## Registry-Level Scope Enforcement (2026-03-11)
+
+Queue filtering (topic, topic_limit, priority) is now enforced centrally in `engine/pipeline/phase_registry.py` via `apply_scope(queue, config)`. All pipeline phases and tests must expect scoped queue behavior from the registry, not runner. Test suite contract: all queue scoping assertions reference `phase_registry.apply_scope`.
+
+---
+
+---
+
 ## 1) Git Workflow (Required)
 
 ### Branching Model
@@ -20,6 +28,10 @@ Examples:
 - `feature/*` -> `dev` via PR with review.
 - `dev` -> `main` only after release readiness checks.
 - No direct pushes to `main`.
+
+### Scope Enforcement Policy
+- All queue filtering logic (topic, topic_limit, priority) is centralized in `phase_registry.py`.
+- Tests must assert against `apply_scope(queue, config)` results.
 
 ### Commit Style
 Use Conventional-style prefixes:
@@ -74,6 +86,10 @@ Examples:
 - Validate state transitions for partial and full runs.
 - Verify generated artifact names and tier progression (`.md`, `_seo.md`, `_final.md`).
 
+### Registry-Level Contract
+- All tests must expect scoped queue from `phase_registry.apply_scope`.
+- No queue filtering in runner or phase modules; only registry.
+
 ### Incremental Testing Protocol (Required)
 Always test in increments before moving to broader runs:
 
@@ -105,7 +121,23 @@ Always test in increments before moving to broader runs:
 
 ---
 
-## 4) Architecture Documentation Update Policy
+## 4) CrewAI Framework Compliance
+
+### AI-Assisted Coding Requirements
+All AI-assisted coding (Copilot, agents, etc.) must follow the CrewAI framework strictly:
+- Use `Crew`, `Flow`, `Task`, and hierarchical process first.
+- Do not create manual loops or custom orchestration.
+- Check for required CrewAI imports/modules and add if missing.
+
+### Workflow Enforcement
+- Check `docs/ARCHITECTURE.md` before modifying flows or agents.
+- Follow `docs/ROADMAP.md` for priorities.
+- Update `CHANGELOG.md` and `docs/RELEASE_CHECKLIST.md` as usual.
+- No new planning docs — always update existing ones.
+
+---
+
+## 5) Architecture Documentation Update Policy
 
 Update `docs/ARCHITECTURE.md` whenever any of these changes occur:
 - New phase added, removed, or reordered.
@@ -120,7 +152,7 @@ Required in same PR:
 
 ---
 
-## 5) Dashboard Evolution Guidance
+## 6) Dashboard Evolution Guidance
 
 Current dashboard is temporary and operational.
 

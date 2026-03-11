@@ -41,6 +41,7 @@ tmp/**
 output/**
 outputs/*.md
 outputs/*.json
+outputs/run_summaries/**
 !outputs/__init__.py
 
 # Runtime state and queue

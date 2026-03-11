@@ -1,0 +1,17 @@
+{
+  "industry": "generic_business",
+  "compliance_level": "standard",
+  "tone": "professional",
+  "cta_style": "consultative",
+  "evidence_required": false,
+  "readability_target": "grade_8_10",
+  "forbidden_phrases": [
+    "guaranteed results",
+    "best in the world",
+    "risk-free for everyone"
+  ],
+  "style_notes": [
+    "Prefer clear, concrete language over hype",
+    "Use practical examples and realistic claims"
+  ]
+}

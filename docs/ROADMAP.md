@@ -1,5 +1,23 @@
 # AI Content Engine Roadmap
 
+## Senior Dev Execution Mode (Ship First)
+
+### Principles
+- Keep momentum: deliver runnable, testable increments every session.
+- Prioritize reliability over sophistication until stable daily runs are routine.
+- Defer polish features unless they remove a real blocker.
+
+### Priority Labels
+- **P0 (Critical Now)**: Required to reliably run the full pipeline.
+- **P1 (Important Next)**: Improves safety and scale after stable runs.
+- **P2 (Tiny / Non-Critical)**: Nice-to-have improvements that can wait.
+
+### Definition of "Running"
+- End-to-end 7-phase run completes on at least 2 topics without manual fixes.
+- Resume/retry behavior works from state for interrupted runs.
+- `--topic`, `--topic-limit`, and `--spoke-limit` execution controls behave correctly.
+- Core outputs are generated with predictable naming and traceable state updates.
+
 ## Planning Horizon
 - Short term: 0-6 weeks
 - Medium term: 1-3 months
@@ -9,51 +27,68 @@
 
 ## Short Term Goals (0-6 Weeks)
 
-1. **Stabilize architecture boundaries**
-   - Move pipeline logic from `main.py` into `engine/pipeline` modules.
-   - Keep `main.py` as a thin CLI entrypoint.
+1. **[DONE] P0: Registry-level scope enforcement**
+   - All queue filtering (topic, topic_limit, priority) is now handled centrally in `engine/pipeline/phase_registry.py` via `apply_scope(queue, config)`.
+   - Runner and all pipeline phases receive raw queue/config; scoping is performed by the registry.
+   - Test suite contract: All queue scoping assertions reference `phase_registry.apply_scope`.
+   - Removed queue filtering from runner and phase modules; only registry handles scoping.
+   - `--topic-limit` queue slicing stable and honored in batch mode.
+   - `--topic` precedence over queue slicing enforced.
+   - Phase skip with explicit reason supported via standardized `Skipping:` log format.
 
-2. **Formalize phase contracts**
-   - Keep the 7 conceptual phases as explicit phase IDs.
-   - Define phase input/output contracts and prerequisite checks.
-   - Evaluate CrewAI `Flows` to model start/listen/router state transitions explicitly.
+2. **[DONE] P0: Lock state reliability**
+   - `state_version` schema stamping on load/save implemented.
+   - Atomic state writes and compatibility normalization in place.
+   - All state mutations routed through `tools/state_manager.py`.
 
-3. **Strengthen state management**
-   - Add typed state schema and `state_version`.
-   - Standardize state updates via a single service.
+3. **[DONE] P0: Run verification baseline**
+   - `tests/test_p0_regressions.py` covers queue filtering, `--topic` precedence, and state normalization.
+   - Standard smoke matrix documented in DEV_RULES.md.
 
-4. **Baseline quality gates**
-   - Add linting/formatting and minimal test coverage for state + pipeline transitions.
-   - Add CI checks for docs, tests, and static analysis.
+4. **[DONE] P1: Formalize phase contracts**
+   - Canonical 11-phase pipeline running in `runner.py`.
+   - Standardized skip reason codes defined in `phase_logging.py`.
+   - Prerequisite checks added to all 11 phases; all skips emit structured `Skipping:` log lines.
+   - CrewAI Flow adapter behind `CREWAI_FLOW_SPIKE_ENABLED` feature flag.
 
-5. **Operational traceability**
-   - Add structured run logs per topic/phase.
-   - Add clear run IDs and artifact lineage metadata.
+5. **[DONE] P1: Operational traceability**
+   - `run_id` generated per run and emitted to console.
+   - Run summaries written to `outputs/run_summaries/*.json`.
+   - CLI commands: `--last-run`, `--run-id`, `--run-list`, `--failed-only`, `--json`.
+
+6. **P2: Tiny/non-critical polish (defer until stable)**
+   - Cleaner console output formatting and emoji-safe Windows logging.
+   - Extra dashboard UX refinements.
+   - Small docs polish and naming consistency passes.
 
 ---
 
 ## Medium Term Goals (1-3 Months)
 
-1. **Modular pipeline execution**
-   - Introduce phase registry/plugin loader.
-   - Allow execution by scope: single topic, queue slice, or full batch.
-   - Pilot CrewAI flow-based orchestration for resumable long-running runs.
+1. **[IN PROGRESS] P1: Modular pipeline execution hardening**
+   - Phase registry implemented (`phase_registry.py`): all 11 phases declared with IDs, module paths, and config args.
+   - `runner.py` decoupled from hardcoded phase imports via `build_phases()`.
+   - `PIPELINE_SKIP_PHASES` env var for runtime phase opt-out.
+   - Remaining: execution scope enforcement (single topic, queue slice, full batch) as explicit registry-level concern.
 
-2. **Memory-aware agents**
-   - Add bounded memory strategy for strategist/intelligence agents where it improves consistency.
-   - Keep writer/SEO outputs deterministic with prompt+artifact contracts.
+2. **P1: Memory-aware agents (bounded use)**
+   - Continue scoped memory for intelligence where measurable value exists.
+   - Keep writer/SEO deterministic with artifact-driven contracts.
+   - Add simple memory metrics (recall count, reuse quality notes).
 
-3. **Cluster scaling loop**
-   - Promote intelligence output into actionable spoke backlog.
-   - Add confidence scoring and approval workflow for scale candidates.
+3. **P1: Cluster scaling loop** [DONE]
+   - Intelligence results parsed into structured spoke backlog with confidence scores.
+   - Candidates deduplicated against existing cluster map.
+   - Backlog persisted to `state/{slug}/spoke_backlog.json` with `approved: false` gate.
+   - Spoke backlog load/save helpers added to `state_manager.py`.
 
-4. **Dashboard evolution (still temporary)**
+4. **P2: Dashboard evolution (temporary UI)**
    - Move Streamlit app to `frontend/streamlit/app.py`.
-   - Consume engine service interfaces rather than direct file assumptions.
+   - Consume engine service interfaces (not direct file coupling).
 
-5. **Publishing hardening**
-   - Add publish staging lifecycle (`draft`, `approved`, `published`).
-   - Add retry-safe publishing and failure recovery.
+5. **P2: Publishing hardening**
+   - Add publish lifecycle (`draft`, `approved`, `published`).
+   - Improve retry/failure recovery semantics.
 
 ---
 
@@ -86,3 +121,13 @@
 - SERP monitoring feedback loop.
 - Topic opportunity discovery using competitor + trend intelligence.
 - Human-in-the-loop editorial checkpoints.
+
+---
+
+## Current Recommended Sequence (What We Do Next)
+
+1. **P0** Fix `--limit` behavior and add tests for queue slicing.
+2. **P0** Add state schema/version checks and atomic phase-state updates.
+3. **P0** Run smoke matrix on 2 fresh topics and log baseline outcomes.
+4. **P1** Add run IDs + execution summaries for traceability.
+5. **P2** Defer cosmetic/logging/dashboard polish until all P0 checks pass consistently.

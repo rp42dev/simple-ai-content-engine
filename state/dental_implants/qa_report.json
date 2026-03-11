@@ -1,0 +1,33 @@
+{
+  "topic": "Dental Implants",
+  "publish_ready": true,
+  "articles": [
+    {
+      "article_name": "article",
+      "output_file": "dental_implants_pillar_final.md",
+      "publish_ready": true,
+      "score": 92,
+      "blocker_count": 0,
+      "warning_count": 2,
+      "summary": "The article is well-structured, detailed, and includes appropriate local clinic information. Metadata is strong, the CTA is clear with correct contact details, and content avoids generic hype or AI-sounding phrases. Minor improvements for smoother flow and occasional wording refinements could be considered but are not blocking."
+    },
+    {
+      "article_name": "spoke_dental_implants_vs_dentures_which_tooth_replacement_option_is_right_for_you",
+      "output_file": "spoke_dental_implants_vs_dentures_which_tooth_replacement_option_is_right_for_you_final.md",
+      "publish_ready": true,
+      "score": 92,
+      "blocker_count": 0,
+      "warning_count": 2,
+      "summary": "The article is well-structured, informative, and tailored to the local context with accurate business data. Metadata is complete and relevant. There are minor issues with a misplaced lowercase letter and minor wording repetition, but no critical blockers. The CTAs are clear and natural, and there is good balance without AI-hype or filler. Overall the article is suitable for publishing with only minor polish recommended."
+    },
+    {
+      "article_name": "spoke_step_by_step_dental_implant_procedure_what_to_expect_before_during_and_after_surgery",
+      "output_file": "spoke_step_by_step_dental_implant_procedure_what_to_expect_before_during_and_after_surgery_final.md",
+      "publish_ready": true,
+      "score": 92,
+      "blocker_count": 0,
+      "warning_count": 2,
+      "summary": "The article on dental implants is comprehensive, well-structured, and well-tailored to the Portobello, Dublin location with the explicit clinic details included. Metadata is complete and descriptive. The tone is professional and informative without AI-sounding hype or filler. The CTAs are natural, relevant, and non-repetitive. Minor improvements could be made to slightly improve flow and clarify a few sections."
+    }
+  ]
+}
