@@ -4,6 +4,14 @@ This document defines how to build safely in an AI-assisted workflow while prote
 
 ---
 
+## Registry-Level Scope Enforcement (2026-03-11)
+
+Queue filtering (topic, topic_limit, priority) is now enforced centrally in `engine/pipeline/phase_registry.py` via `apply_scope(queue, config)`. All pipeline phases and tests must expect scoped queue behavior from the registry, not runner. Test suite contract: all queue scoping assertions reference `phase_registry.apply_scope`.
+
+---
+
+---
+
 ## 1) Git Workflow (Required)
 
 ### Branching Model
@@ -20,6 +28,10 @@ Examples:
 - `feature/*` -> `dev` via PR with review.
 - `dev` -> `main` only after release readiness checks.
 - No direct pushes to `main`.
+
+### Scope Enforcement Policy
+- All queue filtering logic (topic, topic_limit, priority) is centralized in `phase_registry.py`.
+- Tests must assert against `apply_scope(queue, config)` results.
 
 ### Commit Style
 Use Conventional-style prefixes:
@@ -73,6 +85,10 @@ Examples:
 - Run targeted flow for affected phase(s).
 - Validate state transitions for partial and full runs.
 - Verify generated artifact names and tier progression (`.md`, `_seo.md`, `_final.md`).
+
+### Registry-Level Contract
+- All tests must expect scoped queue from `phase_registry.apply_scope`.
+- No queue filtering in runner or phase modules; only registry.
 
 ### Incremental Testing Protocol (Required)
 Always test in increments before moving to broader runs:

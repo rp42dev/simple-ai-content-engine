@@ -1,5 +1,13 @@
 # AI Content Engine Architecture
 
+---
+
+## Registry-Level Scope Enforcement (2026-03-11)
+
+Queue filtering (topic, topic_limit, priority) is now enforced centrally in `engine/pipeline/phase_registry.py` via `apply_scope(queue, config)`. Runner and all phases receive the raw queue/config; scoping is handled by the registry. All tests and run summaries reference scoped queue from registry, not runner.
+
+---
+
 ## Quick Visual
 
 ### Simple Flow
@@ -96,6 +104,11 @@ Current execution in `engine/pipeline/runner.py` is phase-based and queue-driven
 9. Final Link Injection
 10. Humanization & Readability
 11. Article Quality Assurance
+
+**Registry-Level Scope Enforcement:**
+- All queue filtering (topic, topic_limit, priority) is handled by `phase_registry.py`.
+- Runner and phases operate on scoped queue from registry.
+- Test suite contract: all queue assertions reference `phase_registry.apply_scope`.
 
 `main.py` is a thin CLI entrypoint delegating to `engine.pipeline.flow_spike.run_pipeline_entry`, which calls `runner.run_pipeline`.
 

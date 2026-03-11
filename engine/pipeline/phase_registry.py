@@ -103,6 +103,32 @@ def get_phase(phase_id: str) -> Optional[PhaseDefinition]:
     """Return the PhaseDefinition for a given phase_id, or None."""
     return _PHASE_INDEX.get(phase_id)
 
+# ---------------------------------------------------------------------------
+# Scope enforcement function (moved to top-level)
+# ---------------------------------------------------------------------------
+def apply_scope(queue: list, config: dict) -> list:
+    """
+    Enforce execution scope contracts: topic targeting, topic_limit, priority sorting.
+    Args:
+        queue: Raw topic queue list.
+        config: Dict with keys: topic, topic_limit.
+    Returns:
+        Scoped queue list.
+    """
+    if not queue:
+        return []
+    topic = config.get("topic")
+    topic_limit = config.get("topic_limit")
+    priority_map = {"high": 1, "medium": 2, "low": 3}
+    # Targeted topic run
+    if topic:
+        queue = [item for item in queue if item["topic"].lower() == topic.lower()]
+    # Priority sort
+    queue.sort(key=lambda item: priority_map.get(item.get("priority", "medium"), 2))
+    # Topic limit (unless single-topic)
+    if not topic and topic_limit is not None:
+        queue = queue[:topic_limit]
+    return queue
 
 def _disabled_phase_ids() -> List[str]:
     """Read PIPELINE_SKIP_PHASES env var and return list of phase IDs to skip."""
@@ -128,6 +154,7 @@ def build_phases(queue: list, config: dict) -> List[tuple]:
     """
     import importlib
 
+    scoped_queue = apply_scope(queue, config)
     disabled = set(_disabled_phase_ids())
     phases = []
 
@@ -142,7 +169,7 @@ def build_phases(queue: list, config: dict) -> List[tuple]:
         extra_values = [config[key] for key in defn.extra_args]
 
         # Build a zero-argument lambda capturing the current fn and args
-        runner: Callable[[], None] = _make_runner(fn, queue, extra_values)
+        runner: Callable[[], None] = _make_runner(fn, scoped_queue, extra_values)
         phases.append((defn.phase_id, runner))
 
     return phases

@@ -7,6 +7,12 @@ and this project uses a release-style version history starting from the current 
 
 ## [Unreleased]
 
+### Changed
+- Registry-level scope enforcement: All queue filtering (topic, topic_limit, priority) is now handled centrally in `engine/pipeline/phase_registry.py` via `apply_scope(queue, config)`.
+- Runner and all pipeline phases now receive raw queue/config; scoping is performed by the registry.
+- Test suite contract: All queue scoping assertions reference `phase_registry.apply_scope`.
+- Removed queue filtering from runner and phase modules; only registry handles scoping.
+
 ## [0.5.1-beta.1] - 2026-03-11
 
 ### Added

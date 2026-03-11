@@ -219,21 +219,20 @@ def run_pipeline(topic=None, spoke_limit=2, topic_limit=None, cluster_size=6):
         print("No topics found in queue. Add topics via dashboard or topics_queue.json")
         return
 
-    if topic:
-        queue = [item for item in queue if item["topic"].lower() == topic.lower()]
-        if not queue:
-            print(f"Topic '{topic}' not found in queue.")
-            return
-        print(f"Targeted Run: Processing only '{topic}'")
-
-    priority_map = {"high": 1, "medium": 2, "low": 3}
-    queue.sort(key=lambda item: priority_map.get(item.get("priority", "medium"), 2))
-
-    if not topic and topic_limit is not None:
-        queue = queue[:topic_limit]
-
     print(f"[Run] ID: {run_id}")
     print(f"--- Starting Industrial Pipelined Content Engine ({len(queue)} topics) ---")
+
+    run_config = {
+        "topic": topic,
+        "topic_limit": topic_limit,
+        "spoke_limit": spoke_limit,
+        "cluster_size": cluster_size,
+    }
+    phases = build_phases(queue, run_config)
+
+    # After build_phases, get the scoped queue for summary
+    from engine.pipeline.phase_registry import apply_scope
+    scoped_queue = apply_scope(queue, run_config)
 
     summary = {
         "run_id": run_id,
@@ -241,22 +240,11 @@ def run_pipeline(topic=None, spoke_limit=2, topic_limit=None, cluster_size=6):
         "ended_at": None,
         "duration_seconds": None,
         "status": "running",
-        "config": {
-            "topic": topic,
-            "topic_limit": topic_limit,
-            "spoke_limit": spoke_limit,
-            "cluster_size": cluster_size,
-        },
-        "queue_size": len(queue),
-        "topics": [item.get("topic") for item in queue],
+        "config": run_config,
+        "queue_size": len(scoped_queue),
+        "topics": [item.get("topic") for item in scoped_queue],
         "phases": [],
     }
-
-    run_config = {
-        "spoke_limit": spoke_limit,
-        "cluster_size": cluster_size,
-    }
-    phases = build_phases(queue, run_config)
 
     try:
         for phase_name, phase_runner in phases:

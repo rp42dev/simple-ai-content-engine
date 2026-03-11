@@ -27,7 +27,11 @@
 
 ## Short Term Goals (0-6 Weeks)
 
-1. **[DONE] P0: Close execution blockers**
+1. **[DONE] P0: Registry-level scope enforcement**
+   - All queue filtering (topic, topic_limit, priority) is now handled centrally in `engine/pipeline/phase_registry.py` via `apply_scope(queue, config)`.
+   - Runner and all pipeline phases receive raw queue/config; scoping is performed by the registry.
+   - Test suite contract: All queue scoping assertions reference `phase_registry.apply_scope`.
+   - Removed queue filtering from runner and phase modules; only registry handles scoping.
    - `--topic-limit` queue slicing stable and honored in batch mode.
    - `--topic` precedence over queue slicing enforced.
    - Phase skip with explicit reason supported via standardized `Skipping:` log format.

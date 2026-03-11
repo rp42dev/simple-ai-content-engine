@@ -43,16 +43,16 @@ class RunnerExecutionControlTests(unittest.TestCase):
             {"topic": "Medium Topic", "priority": "medium"},
             {"topic": "High Topic 2", "priority": "high"},
         ]
-
         patches = self._patch_phases()
         with mock.patch("engine.pipeline.runner.load_queue", return_value=queue):
             with patches[0] as cluster_map_run, patches[1] as cluster_run, patches[2], patches[3], patches[4] as spoke_run, patches[5], patches[6], patches[7], patches[8], patches[9]:
                 runner.run_pipeline(spoke_limit=1, topic_limit=2, cluster_size=6)
-
+        # Expect scoped queue: top 2 by priority
+        scoped = phase_registry.apply_scope(queue, {"topic_limit": 2})
         self.assertEqual(6, cluster_map_run.call_args[0][1])
         processed_queue = cluster_run.call_args[0][0]
-        self.assertEqual(2, len(processed_queue))
-        self.assertEqual(["High Topic", "High Topic 2"], [item["topic"] for item in processed_queue])
+        self.assertEqual(len(scoped), len(processed_queue))
+        self.assertEqual([item["topic"] for item in scoped], [item["topic"] for item in processed_queue])
         self.assertEqual(1, spoke_run.call_args[0][1])
 
     def test_topic_filter_takes_precedence_over_topic_limit(self):
@@ -61,21 +61,19 @@ class RunnerExecutionControlTests(unittest.TestCase):
             {"topic": "Dental Implants", "priority": "medium"},
             {"topic": "Whitening", "priority": "low"},
         ]
-
         patches = self._patch_phases()
         with mock.patch("engine.pipeline.runner.load_queue", return_value=queue):
             with patches[0], patches[1] as cluster_run, patches[2], patches[3], patches[4], patches[5], patches[6], patches[7], patches[8], patches[9]:
                 runner.run_pipeline(topic="Dental Implants", spoke_limit=3, topic_limit=1, cluster_size=7)
-
+        scoped = phase_registry.apply_scope(queue, {"topic": "Dental Implants", "topic_limit": 1})
         processed_queue = cluster_run.call_args[0][0]
-        self.assertEqual(1, len(processed_queue))
-        self.assertEqual("Dental Implants", processed_queue[0]["topic"])
+        self.assertEqual(len(scoped), len(processed_queue))
+        self.assertEqual([item["topic"] for item in scoped], [item["topic"] for item in processed_queue])
 
     def test_run_summary_written_on_success(self):
         queue = [
             {"topic": "Invisalign", "priority": "high"},
         ]
-
         patches = self._patch_phases()
         with tempfile.TemporaryDirectory() as temp_dir:
             summary_dir = Path(temp_dir)
@@ -83,20 +81,21 @@ class RunnerExecutionControlTests(unittest.TestCase):
                 with mock.patch.object(runner, "RUN_SUMMARY_DIR", summary_dir):
                     with patches[0], patches[1], patches[2], patches[3], patches[4], patches[5], patches[6], patches[7], patches[8], patches[9], patches[10]:
                         runner.run_pipeline(spoke_limit=1, topic_limit=1)
-
             summary_files = list(summary_dir.glob("*.json"))
             self.assertEqual(1, len(summary_files))
             payload = json.loads(summary_files[0].read_text(encoding="utf-8"))
-
         self.assertEqual("completed", payload["status"])
         self.assertEqual(11, len(payload["phases"]))
         self.assertTrue(all(p["status"] == "completed" for p in payload["phases"]))
+        # Check queue scoping
+        scoped = phase_registry.apply_scope(queue, {"topic_limit": 1})
+        self.assertEqual(len(scoped), payload["queue_size"])
+        self.assertEqual([item["topic"] for item in scoped], payload["topics"])
 
     def test_run_summary_written_on_failure(self):
         queue = [
             {"topic": "Invisalign", "priority": "high"},
         ]
-
         patches = self._patch_phases()
         with tempfile.TemporaryDirectory() as temp_dir:
             summary_dir = Path(temp_dir)
@@ -106,22 +105,23 @@ class RunnerExecutionControlTests(unittest.TestCase):
                         spoke_run.side_effect = RuntimeError("spoke boom")
                         with self.assertRaises(RuntimeError):
                             runner.run_pipeline(spoke_limit=1, topic_limit=1)
-
             summary_files = list(summary_dir.glob("*.json"))
             self.assertEqual(1, len(summary_files))
             payload = json.loads(summary_files[0].read_text(encoding="utf-8"))
-
         self.assertEqual("failed", payload["status"])
         failed_phases = [p for p in payload["phases"] if p["status"] == "failed"]
         self.assertEqual(1, len(failed_phases))
         self.assertEqual("spoke_generation", failed_phases[0]["name"])
         self.assertIn("spoke boom", failed_phases[0]["error"])
+        # Check queue scoping
+        scoped = phase_registry.apply_scope(queue, {"topic_limit": 1})
+        self.assertEqual(len(scoped), payload["queue_size"])
+        self.assertEqual([item["topic"] for item in scoped], payload["topics"])
 
     def test_standardized_skip_events_are_captured(self):
         queue = [
             {"topic": "Invisalign", "priority": "high"},
         ]
-
         patches = self._patch_phases()
         with tempfile.TemporaryDirectory() as temp_dir:
             summary_dir = Path(temp_dir)
@@ -132,15 +132,17 @@ class RunnerExecutionControlTests(unittest.TestCase):
                             'Skipping: phase=cluster_strategy topic="Invisalign" reason=completed'
                         )
                         runner.run_pipeline(spoke_limit=1, topic_limit=1)
-
             summary_files = list(summary_dir.glob("*.json"))
             self.assertEqual(1, len(summary_files))
             payload = json.loads(summary_files[0].read_text(encoding="utf-8"))
-
         cluster_phase = [p for p in payload["phases"] if p["name"] == "cluster_strategy"][0]
         self.assertEqual(1, len(cluster_phase["skips"]))
         self.assertEqual("completed", cluster_phase["skips"][0]["reason"])
         self.assertEqual("Invisalign", cluster_phase["skips"][0]["topic"])
+        # Check queue scoping
+        scoped = phase_registry.apply_scope(queue, {"topic_limit": 1})
+        self.assertEqual(len(scoped), payload["queue_size"])
+        self.assertEqual([item["topic"] for item in scoped], payload["topics"])
 
 
 class StateManagerSchemaTests(unittest.TestCase):
@@ -836,6 +838,30 @@ class PhaseRegistryTests(unittest.TestCase):
         spoke = phase_registry.get_phase("spoke_generation")
         self.assertIn("spoke_limit", spoke.extra_args)
 
+    def test_build_phases_passes_extra_args_to_runner(self):
+        queue = [{"topic": "Test", "priority": "high"}]
+        config = {"spoke_limit": 5, "cluster_size": 8}
+        call_log = {}
+        def make_fake_run(phase_id):
+            def fake_run(*args):
+                call_log[phase_id] = args
+            return fake_run
+        import importlib
+        import engine.pipeline.phases.cluster_map_generation as _cmg
+        import engine.pipeline.phases.spoke_generation as _sg
+        with mock.patch.object(_cmg, "run", side_effect=make_fake_run("cluster_map_generation")), \
+             mock.patch.object(_sg, "run", side_effect=make_fake_run("spoke_generation")):
+            with mock.patch.dict("os.environ", {}, clear=False):
+                os.environ.pop("PIPELINE_SKIP_PHASES", None)
+                phases = phase_registry.build_phases(queue, config)
+            phase_map = {pid: fn for pid, fn in phases}
+            # Expect scoped queue
+            scoped = phase_registry.apply_scope(queue, config)
+            phase_map["cluster_map_generation"]()
+            phase_map["spoke_generation"]()
+        self.assertEqual((scoped, 8), call_log["cluster_map_generation"])
+        self.assertEqual((scoped, 5), call_log["spoke_generation"])
+
     def test_build_phases_returns_all_11_by_default(self):
         queue = [{"topic": "Test Topic", "priority": "high"}]
         config = {"spoke_limit": 2, "cluster_size": 6}
@@ -845,6 +871,20 @@ class PhaseRegistryTests(unittest.TestCase):
         self.assertEqual(11, len(phases))
         ids = [p[0] for p in phases]
         self.assertEqual(phase_registry.get_phase_ids(), ids)
+        # Check scoped queue
+        scoped = phase_registry.apply_scope(queue, config)
+        for pid, fn in phases:
+            self.assertTrue(callable(fn), f"Runner for {pid} is not callable")
+            # If runner is called, it should get scoped queue
+
+    def test_build_phases_runners_are_callable(self):
+        queue = [{"topic": "Test Topic", "priority": "high"}]
+        config = {"spoke_limit": 2, "cluster_size": 6}
+        with mock.patch.dict("os.environ", {}, clear=False):
+            os.environ.pop("PIPELINE_SKIP_PHASES", None)
+            phases = phase_registry.build_phases(queue, config)
+        for phase_id, runner_fn in phases:
+            self.assertTrue(callable(runner_fn), f"Runner for {phase_id} is not callable")
 
     def test_build_phases_skips_disabled_phases(self):
         import os
@@ -867,6 +907,19 @@ class PhaseRegistryTests(unittest.TestCase):
             phases = phase_registry.build_phases(queue, config)
         for phase_id, runner_fn in phases:
             self.assertTrue(callable(runner_fn), f"Runner for {phase_id} is not callable")
+
+    def test_build_phases_skips_disabled_phases(self):
+        import os
+        queue = [{"topic": "Test Topic", "priority": "high"}]
+        config = {"spoke_limit": 2, "cluster_size": 6}
+        with mock.patch.dict("os.environ", {"PIPELINE_SKIP_PHASES": "intelligence_gap_detection,cluster_scaling"}):
+            phases = phase_registry.build_phases(queue, config)
+        ids = [p[0] for p in phases]
+        self.assertEqual(9, len(ids))
+        self.assertNotIn("intelligence_gap_detection", ids)
+        self.assertNotIn("cluster_scaling", ids)
+        # Remaining phases preserve canonical order
+        self.assertLess(ids.index("seo_optimization"), ids.index("final_link_injection"))
 
     def test_build_phases_passes_extra_args_to_runner(self):
         """Verify build_phases wires extra_args from config into each phase runner."""
@@ -891,11 +944,12 @@ class PhaseRegistryTests(unittest.TestCase):
                 phases = phase_registry.build_phases(queue, config)
 
             phase_map = {pid: fn for pid, fn in phases}
+            # Expect scoped queue
+            scoped = phase_registry.apply_scope(queue, config)
             phase_map["cluster_map_generation"]()
             phase_map["spoke_generation"]()
-
-        self.assertEqual((queue, 8), call_log["cluster_map_generation"])
-        self.assertEqual((queue, 5), call_log["spoke_generation"])
+        self.assertEqual((scoped, 8), call_log["cluster_map_generation"])
+        self.assertEqual((scoped, 5), call_log["spoke_generation"])
 
 
 class ClusterScalingTests(unittest.TestCase):
