@@ -61,10 +61,11 @@
 
 ## Medium Term Goals (1-3 Months)
 
-1. **P1: Modular pipeline execution hardening**
-   - Introduce phase registry/plugin loader.
-   - Preserve execution scopes: single topic, queue slice, full batch.
-   - Keep flow-based orchestration as opt-in until parity is proven.
+1. **[IN PROGRESS] P1: Modular pipeline execution hardening**
+   - Phase registry implemented (`phase_registry.py`): all 11 phases declared with IDs, module paths, and config args.
+   - `runner.py` decoupled from hardcoded phase imports via `build_phases()`.
+   - `PIPELINE_SKIP_PHASES` env var for runtime phase opt-out.
+   - Remaining: execution scope enforcement (single topic, queue slice, full batch) as explicit registry-level concern.
 
 2. **P1: Memory-aware agents (bounded use)**
    - Continue scoped memory for intelligence where measurable value exists.

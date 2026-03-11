@@ -1,5 +1,6 @@
 import json
 import io
+import os
 import tempfile
 import unittest
 from contextlib import redirect_stdout
@@ -9,26 +10,30 @@ from unittest import mock
 from crews import content_crew
 from engine.pipeline import helpers
 from engine.pipeline import runner
+from engine.pipeline import phase_registry
 from engine.pipeline.phases import article_quality_assurance as qa_phase
 from tools import article_post_processor
 from tools import state_manager
 
+# Ordered phase module paths matching canonical pipeline order
+_PHASE_MODULE_PATHS = [
+    "engine.pipeline.phases.cluster_map_generation.run",
+    "engine.pipeline.phases.cluster_strategy.run",
+    "engine.pipeline.phases.serp_analysis.run",
+    "engine.pipeline.phases.pillar_generation.run",
+    "engine.pipeline.phases.spoke_generation.run",
+    "engine.pipeline.phases.seo_optimization.run",
+    "engine.pipeline.phases.intelligence_gap_detection.run",
+    "engine.pipeline.phases.cluster_scaling.run",
+    "engine.pipeline.phases.final_link_injection.run",
+    "engine.pipeline.phases.humanization_readability.run",
+    "engine.pipeline.phases.article_quality_assurance.run",
+]
+
 
 class RunnerExecutionControlTests(unittest.TestCase):
     def _patch_phases(self):
-        return [
-            mock.patch.object(runner.cluster_map_generation, "run"),
-            mock.patch.object(runner.cluster_strategy, "run"),
-            mock.patch.object(runner.serp_analysis, "run"),
-            mock.patch.object(runner.pillar_generation, "run"),
-            mock.patch.object(runner.spoke_generation, "run"),
-            mock.patch.object(runner.seo_optimization, "run"),
-            mock.patch.object(runner.intelligence_gap_detection, "run"),
-            mock.patch.object(runner.cluster_scaling, "run"),
-            mock.patch.object(runner.final_link_injection, "run"),
-            mock.patch.object(runner.humanization_readability, "run"),
-            mock.patch.object(runner.article_quality_assurance, "run"),
-        ]
+        return [mock.patch(path) for path in _PHASE_MODULE_PATHS]
 
     def test_topic_limit_caps_prioritized_queue(self):
         queue = [
@@ -797,6 +802,99 @@ class QAProfileThresholdTests(unittest.TestCase):
         blockers, warnings, strengths = qa_phase._deterministic_findings(article, profile=None)
         self.assertIsInstance(blockers, list)
         self.assertIsInstance(warnings, list)
+
+
+class PhaseRegistryTests(unittest.TestCase):
+    def test_get_phase_ids_returns_canonical_order(self):
+        ids = phase_registry.get_phase_ids()
+        self.assertEqual(11, len(ids))
+        self.assertEqual("cluster_map_generation", ids[0])
+        self.assertEqual("article_quality_assurance", ids[-1])
+        # Verify key ordering invariants
+        self.assertLess(ids.index("cluster_strategy"), ids.index("serp_analysis"))
+        self.assertLess(ids.index("serp_analysis"), ids.index("pillar_generation"))
+        self.assertLess(ids.index("pillar_generation"), ids.index("spoke_generation"))
+        self.assertLess(ids.index("seo_optimization"), ids.index("final_link_injection"))
+        self.assertLess(ids.index("final_link_injection"), ids.index("humanization_readability"))
+        self.assertLess(ids.index("humanization_readability"), ids.index("article_quality_assurance"))
+
+    def test_get_phase_returns_definition(self):
+        defn = phase_registry.get_phase("seo_optimization")
+        self.assertIsNotNone(defn)
+        self.assertEqual("seo_optimization", defn.phase_id)
+        self.assertEqual("engine.pipeline.phases.seo_optimization", defn.module_path)
+        self.assertEqual("run", defn.runner_fn)
+        self.assertEqual([], defn.extra_args)
+
+    def test_get_phase_returns_none_for_unknown(self):
+        self.assertIsNone(phase_registry.get_phase("nonexistent_phase"))
+
+    def test_phases_with_extra_args_are_declared(self):
+        cluster_map = phase_registry.get_phase("cluster_map_generation")
+        self.assertIn("cluster_size", cluster_map.extra_args)
+        spoke = phase_registry.get_phase("spoke_generation")
+        self.assertIn("spoke_limit", spoke.extra_args)
+
+    def test_build_phases_returns_all_11_by_default(self):
+        queue = [{"topic": "Test Topic", "priority": "high"}]
+        config = {"spoke_limit": 2, "cluster_size": 6}
+        with mock.patch.dict("os.environ", {}, clear=False):
+            os.environ.pop("PIPELINE_SKIP_PHASES", None)
+            phases = phase_registry.build_phases(queue, config)
+        self.assertEqual(11, len(phases))
+        ids = [p[0] for p in phases]
+        self.assertEqual(phase_registry.get_phase_ids(), ids)
+
+    def test_build_phases_skips_disabled_phases(self):
+        import os
+        queue = [{"topic": "Test Topic", "priority": "high"}]
+        config = {"spoke_limit": 2, "cluster_size": 6}
+        with mock.patch.dict("os.environ", {"PIPELINE_SKIP_PHASES": "intelligence_gap_detection,cluster_scaling"}):
+            phases = phase_registry.build_phases(queue, config)
+        ids = [p[0] for p in phases]
+        self.assertEqual(9, len(ids))
+        self.assertNotIn("intelligence_gap_detection", ids)
+        self.assertNotIn("cluster_scaling", ids)
+        # Remaining phases preserve canonical order
+        self.assertLess(ids.index("seo_optimization"), ids.index("final_link_injection"))
+
+    def test_build_phases_runners_are_callable(self):
+        queue = [{"topic": "Test Topic", "priority": "high"}]
+        config = {"spoke_limit": 2, "cluster_size": 6}
+        with mock.patch.dict("os.environ", {}, clear=False):
+            os.environ.pop("PIPELINE_SKIP_PHASES", None)
+            phases = phase_registry.build_phases(queue, config)
+        for phase_id, runner_fn in phases:
+            self.assertTrue(callable(runner_fn), f"Runner for {phase_id} is not callable")
+
+    def test_build_phases_passes_extra_args_to_runner(self):
+        """Verify build_phases wires extra_args from config into each phase runner."""
+        queue = [{"topic": "Test", "priority": "high"}]
+        config = {"spoke_limit": 5, "cluster_size": 8}
+
+        call_log = {}
+
+        def make_fake_run(phase_id):
+            def fake_run(*args):
+                call_log[phase_id] = args
+            return fake_run
+
+        import importlib
+        import engine.pipeline.phases.cluster_map_generation as _cmg
+        import engine.pipeline.phases.spoke_generation as _sg
+
+        with mock.patch.object(_cmg, "run", side_effect=make_fake_run("cluster_map_generation")), \
+             mock.patch.object(_sg, "run", side_effect=make_fake_run("spoke_generation")):
+            with mock.patch.dict("os.environ", {}, clear=False):
+                os.environ.pop("PIPELINE_SKIP_PHASES", None)
+                phases = phase_registry.build_phases(queue, config)
+
+            phase_map = {pid: fn for pid, fn in phases}
+            phase_map["cluster_map_generation"]()
+            phase_map["spoke_generation"]()
+
+        self.assertEqual((queue, 8), call_log["cluster_map_generation"])
+        self.assertEqual((queue, 5), call_log["spoke_generation"])
 
 
 if __name__ == "__main__":

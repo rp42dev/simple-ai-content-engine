@@ -7,6 +7,22 @@ and this project uses a release-style version history starting from the current 
 
 ## [Unreleased]
 
+## [0.5.0-beta.1] - 2026-03-11
+
+### Added
+- `engine/pipeline/phase_registry.py`: canonical phase registry with:
+  - `PhaseDefinition` dataclass declaring each phase's ID, module path, runner function, and extra config args.
+  - `PHASE_DEFINITIONS`: ordered list of all 11 canonical phases.
+  - `get_phase_ids()`: returns stable ordered phase ID list.
+  - `get_phase(phase_id)`: fast O(1) lookup by ID.
+  - `build_phases(queue, config)`: builds the executable `(phase_id, callable)` list for `runner.py`, resolving extra args from run config.
+  - `PIPELINE_SKIP_PHASES` env var support: comma-separated phase IDs to disable at runtime for debugging/testing without touching code.
+- 8 new `PhaseRegistryTests` covering canonical order, phase lookup, extra-arg wiring, `PIPELINE_SKIP_PHASES` disabling, and callable validation.
+
+### Changed
+- `engine/pipeline/runner.py`: replaced hardcoded phase import list and inline phase tuples with `build_phases()` from the registry. Runner is now decoupled from phase module imports.
+- `tests/test_p0_regressions.py`: updated `_patch_phases()` to patch via module string paths (registry-compatible); added `import os`.
+
 ## [0.4.1-beta.1] - 2026-03-11
 
 ### Added
