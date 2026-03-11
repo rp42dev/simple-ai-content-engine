@@ -80,6 +80,10 @@ def run(queue):
             log_phase_skip("intelligence_gap_detection", topic, "completed")
             continue
 
+        if not state.get("cluster_generated"):
+            log_phase_skip("intelligence_gap_detection", topic, "missing_prerequisite", detail="cluster_strategy")
+            continue
+
         competitor_url = item.get("competitor_url")
         if not competitor_url:
             log_phase_skip("intelligence_gap_detection", topic, "competitor_url_missing")

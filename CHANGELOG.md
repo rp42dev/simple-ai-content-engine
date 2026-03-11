@@ -7,6 +7,26 @@ and this project uses a release-style version history starting from the current 
 
 ## [Unreleased]
 
+## [0.4.1-beta.1] - 2026-03-11
+
+### Added
+- Standardized skip reason code constants in `engine/pipeline/phase_logging.py`:
+  `completed`, `missing_prerequisite`, `cluster_approval_pending`, `writing_pending`,
+  `seo_pending`, `intelligence_pending`, `link_injection_pending`, `humanization_pending`,
+  `competitor_url_missing`, `cluster_data_missing`, `final_files_missing`, `article_files_missing`.
+
+### Changed
+- Formalized prerequisite checks for all 11 pipeline phases:
+  - `cluster_strategy`: skips with `missing_prerequisite` if `cluster_map_generated` state key not set.
+  - `serp_analysis`: skips with `missing_prerequisite` if `cluster_generated` state key not set.
+  - `pillar_generation`: replaced silent `continue` on missing cluster file with logged `missing_prerequisite` skip.
+  - `spoke_generation`: replaced silent `continue` on missing cluster file with logged `missing_prerequisite` skip.
+  - `seo_optimization`: skips with `writing_pending` if `pillar_written` not set; replaced silent `continue` on missing cluster file with logged `missing_prerequisite` skip.
+  - `intelligence_gap_detection`: skips with `missing_prerequisite` if `cluster_generated` state key not set.
+  - `final_link_injection`: skips with `seo_pending` if `seo_optimized` not set.
+  - Phases already covered: `cluster_scaling` (`intelligence_pending`), `humanization_readability` (`link_injection_pending`), `article_quality_assurance` (`humanization_pending`).
+- All phase skips now emit a structured `Skipping:` log line captured by run summaries.
+
 ## [0.4.0-beta.1] - 2026-03-11
 
 ### Added

@@ -20,6 +20,10 @@ def run(queue):
             log_phase_skip("cluster_strategy", topic, "completed")
             continue
 
+        if not state.get("cluster_map_generated"):
+            log_phase_skip("cluster_strategy", topic, "missing_prerequisite", detail="cluster_map_generation")
+            continue
+
         cluster_map = load_cluster_map(topic)
         cluster_map_context = str(cluster_map) if cluster_map else None
 

@@ -77,6 +77,10 @@ def run(queue):
             log_phase_skip("serp_analysis", topic, "completed")
             continue
 
+        if not state.get("cluster_generated"):
+            log_phase_skip("serp_analysis", topic, "missing_prerequisite", detail="cluster_strategy")
+            continue
+
         if not os.path.exists(cluster_file):
             log_phase_skip("serp_analysis", topic, "cluster_data_missing")
             continue

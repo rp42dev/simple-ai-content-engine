@@ -41,9 +41,10 @@
    - `tests/test_p0_regressions.py` covers queue filtering, `--topic` precedence, and state normalization.
    - Standard smoke matrix documented in DEV_RULES.md.
 
-4. **P1: Formalize phase contracts** _(in progress)_
-   - Canonical 11-phase pipeline now running in `runner.py`.
-   - Prerequisite checks and standardized skip reasons: ongoing.
+4. **[DONE] P1: Formalize phase contracts**
+   - Canonical 11-phase pipeline running in `runner.py`.
+   - Standardized skip reason codes defined in `phase_logging.py`.
+   - Prerequisite checks added to all 11 phases; all skips emit structured `Skipping:` log lines.
    - CrewAI Flow adapter behind `CREWAI_FLOW_SPIKE_ENABLED` feature flag.
 
 5. **[DONE] P1: Operational traceability**
