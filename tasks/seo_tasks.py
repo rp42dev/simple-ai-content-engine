@@ -1,33 +1,71 @@
 from crewai import Task
 
-def get_seo_optimization_task(agent, article_content):
+def get_seo_optimization_task(agent):
     return Task(
-        description=f"""Review and optimize the following article content for SEO:
+        description="""Review and optimize the following article content for SEO.
+
+        Topic: {topic}
+        Location: {location_context}
+        Business: {business_context}
+
+        Current article:
         {article_content}
-        
+
         Tasks:
-        - Suggest a compelling meta description (max 160 chars).
-        - Verify keyword inclusion (natural flow).
-        - Suggest better H2/H3 headers if needed.
-        - Check for internal linking opportunities.""",
-        expected_output="A report containing the meta description and specific SEO improvement suggestions.",
+                - Suggest a compelling meta title
+                - Suggest a compelling meta description (max 160 chars)
+                - Suggest a short list of keyword or phrase opportunities only where needed
+                - Suggest 0-3 heading refinements if needed
+                - Suggest 0-4 FAQ question improvements for real search intent
+                - If location context exists, suggest local SEO signals without keyword stuffing
+
+        Important constraints:
+                - Return JSON only
+                - Do not rewrite the article
+                - Do not return markdown article content
+
+                Return JSON in this shape:
+                {
+                    "meta_title": "",
+                    "meta_description": "",
+                    "keywords": [""],
+                    "heading_suggestions": [""],
+                    "faq_suggestions": [""],
+                    "local_seo_notes": [""]
+                }""",
+                expected_output="A JSON object containing SEO suggestions only.",
         agent=agent
     )
 
-def get_internal_linking_task(agent, current_article, cluster_info):
+def get_internal_linking_task(agent):
     return Task(
-        description=f"""Based on this cluster information:
+        description="""Based on this cluster information:
         {cluster_info}
-        
+
         Analyze the current article and search for opportunities to link to other articles in the cluster:
-        {current_article}
-        
+        {article_content}
+
         Tasks:
         1. Identify 3-5 places where internal links to other topics in the cluster would be natural.
-        2. Rewrite the article to include these links using the following Markdown syntax: [Anchor Text](Topic Name).
-           Example: "...when considering [Invisalign treatment](Invisalign Treatment Process) you should..."
-        3. Ensure the full article content is preserved, with the links seamlessly integrated.
-        4. Append a 'Meta Description' at the very top of the article.""",
-        expected_output="The full article in markdown format with internal link placeholders [Link Text](Topic Name) inserted.",
+                2. Return natural anchor phrases and their link targets.
+        3. Use descriptive anchor text that matches the linked topic naturally.
+          4. Avoid raw title repetition as anchor text unless it reads naturally.
+                5. Do not use standalone parentheses or awkward trailing fragments.
+
+        Local context:
+        - Location: {location_context}
+                - Business: {business_context}
+
+                Return JSON only in this shape:
+                {
+                    "internal_links": [
+                        {
+                            "anchor": "",
+                            "target_topic": "",
+                            "url": ""
+                        }
+                    ]
+                }""",
+                expected_output="A JSON object containing internal link suggestions only.",
         agent=agent
     )

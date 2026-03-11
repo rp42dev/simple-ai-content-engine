@@ -7,7 +7,8 @@ import time
 import subprocess
 
 from tools.wordpress_tool import post_to_wordpress
-from tools.state_manager import load_state, save_state
+from tools.state_manager import load_pipeline_status, load_qa_summary, load_state, save_state
+from engine.pipeline.helpers import get_cluster_pillar, get_cluster_spokes
 
 st.set_page_config(
     page_title="Content Engine",
@@ -27,6 +28,10 @@ load_css()
 def get_safe_name(s):
     return re.sub(r'[^a-zA-Z0-9]', '_', s.lower())
 
+
+def is_canonical_output_markdown(filename):
+    return filename.endswith(".md") and not filename.endswith("_seo.md") and not filename.endswith("_seo_final.md")
+
 def load_queue():
     p = "topics_queue.json"
     if os.path.exists(p):
@@ -39,13 +44,14 @@ def save_queue(q):
         json.dump(q, f, indent=2)
 
 def load_topic_state(topic):
-    Path("state").mkdir(exist_ok=True)
-    sf = Path(f"state/workflow_{get_safe_name(topic)}.json")
-    return json.loads(sf.read_text()) if sf.exists() else {"topic": topic}
+    return load_state(topic)
+
+
+def load_topic_pipeline_status(topic):
+    return load_pipeline_status(topic)
 
 def save_topic_state(topic, state):
-    sf = Path(f"state/workflow_{get_safe_name(topic)}.json")
-    sf.write_text(json.dumps(state, indent=2))
+    save_state(state, topic)
 
 def parse_blueprint(topic):
     """Returns (data_dict, error_str)."""
@@ -87,7 +93,15 @@ def run_engine(cmd_args, session_ph, table_ph=None):
                         error_log.pop(0)
 
                     # ── Stdout → session state parser ──
-                    if "Phase 1" in line:
+                    if "Phase 0" in line:
+                        st.session_state.phase = "PHASE 0  —  CLUSTER MAP"
+                        st.session_state.article = ""
+                        st.session_state.agent_stage = "Planning pillar and spoke architecture..."
+                    elif "Phase 1.5" in line:
+                        st.session_state.phase = "PHASE 1.5  —  SERP"
+                        st.session_state.article = ""
+                        st.session_state.agent_stage = "Reverse-engineering ranking structures..."
+                    elif "Phase 1" in line:
                         st.session_state.phase = "PHASE 1  —  STRATEGY"
                         st.session_state.article = ""
                         st.session_state.agent_stage = "Building topic cluster..."
@@ -109,6 +123,12 @@ def run_engine(cmd_args, session_ph, table_ph=None):
                     elif "Phase 7" in line:
                         st.session_state.phase = "PHASE 7  —  LINK INJECTION"
                         st.session_state.agent_stage = "Injecting internal links..."
+                    elif "Phase 8" in line:
+                        st.session_state.phase = "PHASE 8  —  HUMANIZATION"
+                        st.session_state.agent_stage = "Improving readability and tone..."
+                    elif "Phase 9" in line:
+                        st.session_state.phase = "PHASE 9  —  QA"
+                        st.session_state.agent_stage = "Reviewing final articles for publish readiness..."
                     elif "Writing Pillar:" in line:
                         title = line.split("Writing Pillar:")[-1].strip().rstrip(".")
                         st.session_state.article = f"Pillar: {title}"
@@ -169,29 +189,43 @@ def render_status(ph, running=False):
 
 def render_table(ph):
     import pandas as pd
+
+    def status_chip(value):
+        value = (value or "pending").upper()
+        if value == "COMPLETED":
+            return "DONE"
+        if value == "RUNNING":
+            return "RUNNING"
+        if value == "FAILED":
+            return "FAILED"
+        return "PENDING"
+
     rows = []
     for item in load_queue():
         topic = item["topic"]
         state = load_topic_state(topic)
+        pipeline_status = load_topic_pipeline_status(topic)
+        location = item.get("location") if isinstance(item.get("location"), dict) else {}
         d = state.get("spokes_completed", 0)
         t = state.get("spokes_total", "?")
+        bp_data, _ = parse_blueprint(topic)
+        cluster_size = len(get_cluster_spokes(bp_data)) if bp_data else 0
 
-        if state.get("pillar_written") and state.get("spokes_written"):
-            prod = "COMPLETE"
-        elif state.get("cluster_approved"):
-            prod = f"WRITING SPOKES ({d}/{t})" if state.get("pillar_written") else "WRITING PILLAR"
-        elif state.get("cluster_generated"):
-            prod = "AWAITING APPROVAL"
-        else:
-            prod = "PENDING"
+        location_parts = [part for part in [location.get("city"), location.get("area"), location.get("country")] if part]
+        location_label = ", ".join(location_parts) if location_parts else "—"
 
         rows.append({
             "TOPIC": topic,
-            "STRATEGY": "DONE" if state.get("cluster_generated") else "—",
-            "PRODUCTION": prod,
-            "SEO": "DONE" if state.get("seo_optimized") else "—",
-            "LINKS": "DONE" if state.get("links_injected") else "—",
-            "PROGRESS": f"{int(sum(1 for k in ['cluster_generated','pillar_written','spokes_written','seo_optimized','links_injected'] if state.get(k))/5*100)}%"
+            "LOCATION": location_label,
+            "CLUSTER SIZE": cluster_size,
+            "MAP": status_chip(pipeline_status.get("cluster_map")),
+            "SERP": status_chip(pipeline_status.get("serp_analysis")),
+            "WRITE": status_chip(pipeline_status.get("writer")),
+            "PILLAR STATUS": "DONE" if state.get("pillar_written") else ("READY" if state.get("cluster_approved") else "PENDING"),
+            "SPOKE STATUS": f"{d}/{t}" if state.get("spokes_total") else ("DONE" if state.get("spokes_written") else "PENDING"),
+            "SEO STATUS": status_chip(pipeline_status.get("seo")),
+            "LINKS": status_chip(pipeline_status.get("linking")),
+            "QA": "PASS" if state.get("publish_ready") else (status_chip(pipeline_status.get("qa")) if state.get("qa_reviewed") else "PENDING"),
         })
     ph.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
@@ -215,10 +249,30 @@ with st.sidebar:
     n_topic = st.text_input("TOPIC", placeholder="Dental Implants")
     n_url   = st.text_input("URL", placeholder="Competitor URL")
     n_prio  = st.selectbox("PRIORITY", ["high","medium","low"], index=1)
+    n_city = st.text_input("CITY", placeholder="Dublin")
+    n_area = st.text_input("AREA", placeholder="Dublin 8")
+    n_country = st.text_input("COUNTRY", placeholder="Ireland")
+    n_business_name = st.text_input("BUSINESS NAME", placeholder="Dental Care Dublin 8")
+    n_business_phone = st.text_input("BUSINESS PHONE", placeholder="01 4549688")
     if st.button("ADD TO QUEUE", use_container_width=True):
         if n_topic:
             q = load_queue()
-            q.append({"topic": n_topic, "competitor_url": n_url, "priority": n_prio})
+            new_item = {"topic": n_topic, "competitor_url": n_url, "priority": n_prio}
+
+            if any([n_city, n_area, n_country]):
+                new_item["location"] = {
+                    "city": n_city,
+                    "area": n_area,
+                    "country": n_country,
+                }
+
+            if any([n_business_name, n_business_phone]):
+                new_item["business"] = {
+                    "name": n_business_name,
+                    "phone": n_business_phone,
+                }
+
+            q.append(new_item)
             save_queue(q)
             st.success(f"ADDED")
             time.sleep(0.8); st.rerun()
@@ -273,7 +327,14 @@ else:
         next_target = None
         for t in topics:
             t_state = load_topic_state(t)
-            is_done = t_state.get("pillar_written") and t_state.get("spokes_written") and t_state.get("seo_optimized") and t_state.get("links_injected")
+            is_done = (
+                t_state.get("pillar_written")
+                and t_state.get("spokes_written")
+                and t_state.get("seo_optimized")
+                and t_state.get("links_injected")
+                and t_state.get("humanized")
+                and t_state.get("qa_reviewed")
+            )
             if not is_done:
                 next_target = t
                 break
@@ -291,7 +352,7 @@ else:
 
     # ── Step 1: Strategy Blueprint immediately below run controls ──
     if bp_data:
-        spokes = bp_data.get("spoke_topics", [])
+        spokes = get_cluster_spokes(bp_data)
         spoke_labels = []
         for s in spokes:
             label = s.get("title") or s.get("topic") or s.get("sub_topic","?")
@@ -301,7 +362,7 @@ else:
             st.markdown(f"""
                 <div class="blueprint-card">
                     <div class="pillar-label">PILLAR ARTICLE</div>
-                    <div class="pillar-title">{bp_data.get('pillar_topic','')}</div>
+                    <div class="pillar-title">{get_cluster_pillar(bp_data,'')}</div>
                     <div class="pillar-label">SPOKE ARTICLES  ({len(spokes)})</div>
                     {"".join(f"<div>· {s}</div>" for s in spoke_labels)}
                 </div>
@@ -372,6 +433,7 @@ else:
 
     if m_target:
         m_state = load_topic_state(m_target)
+        m_pipeline = load_topic_pipeline_status(m_target)
 
         # Action buttons
         ac1, ac2, ac3 = st.columns(3)
@@ -385,11 +447,19 @@ else:
             if st.button("PUBLISH TO CMS", use_container_width=True):
                 st.info("CMS PUBLISHING — NOT CONFIGURED")
 
+        with st.expander("PIPELINE STATUS", expanded=False):
+            st.json(m_pipeline)
+
+        qa_summary = load_qa_summary(m_target)
+        if qa_summary:
+            with st.expander("QA SUMMARY", expanded=False):
+                st.json(qa_summary)
+
         # Artifacts — match pillar files AND spoke files from cluster
         st.markdown("<br>", unsafe_allow_html=True)
         safe = get_safe_name(m_target)
         if os.path.exists("outputs"):
-            all_md = [f for f in os.listdir("outputs") if f.endswith(".md")]
+            all_md = [f for f in os.listdir("outputs") if is_canonical_output_markdown(f)]
             
             # Always include files with the parent topic slug
             matched = [f for f in all_md if safe in f.lower()]
@@ -397,7 +467,7 @@ else:
             # Also pull in spoke files via the cluster blueprint
             m_bp_data, _ = parse_blueprint(m_target)
             if m_bp_data:
-                for spoke in m_bp_data.get("spoke_topics", []):
+                for spoke in get_cluster_spokes(m_bp_data):
                     s_name = spoke.get("title") or spoke.get("topic") or spoke.get("sub_topic","")
                     if s_name:
                         s_safe = get_safe_name(s_name)

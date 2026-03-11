@@ -25,3 +25,15 @@ def get_gap_detector_agent():
         allow_delegation=False,
         verbose=True
     )
+
+
+def get_serp_analysis_agent():
+    return Agent(
+        role='SERP Analysis Agent',
+        goal='Analyze search result structures and extract SEO guidance without generating article content.',
+        backstory="""You study top-ranking pages to understand what structural patterns already work in search.
+        You do not write articles and you never copy text from analyzed pages. You extract heading themes,
+        recurring questions, and depth signals so writer agents can produce original content with a strong structure.""",
+        allow_delegation=False,
+        verbose=True
+    )

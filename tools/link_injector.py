@@ -1,6 +1,7 @@
 import os
 import json
 import re
+from engine.pipeline.helpers import get_cluster_pillar, get_cluster_spokes
 
 def clean_string(s):
     """Normalize strings for matching: remove slashes, dashes, dots, and lowercase everything."""
@@ -20,8 +21,8 @@ def inject_links(article_path, cluster_data, output_dir):
     with open(article_path, "r", encoding="utf-8", errors="replace") as f:
         content = f.read()
 
-    pillar_topic = cluster_data.get("pillar_topic")
-    spoke_topics = cluster_data.get("spoke_topics", [])
+    pillar_topic = get_cluster_pillar(cluster_data)
+    spoke_topics = get_cluster_spokes(cluster_data)
     
     # Create normalized map: cleaned_name -> filename
     topic_map = {}
