@@ -1,0 +1,18 @@
+{
+  "industry": "legal",
+  "compliance_level": "strict",
+  "tone": "precise_professional",
+  "cta_style": "consultative",
+  "evidence_required": true,
+  "readability_target": "grade_9_11",
+  "forbidden_phrases": [
+    "guaranteed legal outcome",
+    "always wins in court",
+    "one-size-fits-all legal advice"
+  ],
+  "style_notes": [
+    "Use jurisdiction-aware wording",
+    "Avoid definitive legal outcome claims",
+    "Encourage seeking qualified legal counsel for specific cases"
+  ]
+}

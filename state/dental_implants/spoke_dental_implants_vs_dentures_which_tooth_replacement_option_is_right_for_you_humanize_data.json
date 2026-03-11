@@ -1,0 +1,114 @@
+{
+  "phrase_rewrites": [
+    {
+      "source": "Losing a tooth or several teeth can raise a lot of questions \u2014 How will this affect my smile, my ability to eat, or even my confidence?",
+      "replacement": "Losing one or more teeth can raise questions \u2014 How will it affect my smile, eating, and confidence?",
+      "reason": "Shortened sentence for readability and flow."
+    },
+    {
+      "source": "Choosing the right tooth replacement option is an important step in restoring your oral health and daily comfort.",
+      "replacement": "Choosing the right tooth replacement helps restore your oral health and daily comfort.",
+      "reason": "Simplified language and removed clich\u00e9."
+    },
+    {
+      "source": "Two of the most common options offered today are *dental implants* and *dentures*.",
+      "replacement": "Two common tooth replacement options today are *dental implants* and *dentures*.",
+      "reason": "Smoother phrasing."
+    },
+    {
+      "source": "Many patients want to know about pain, cost, comfort, recovery time, oral health benefits, and whether their own health situation might limit their choices.",
+      "replacement": "Patients often ask about pain, cost, comfort, recovery time, oral health benefits, and any health restrictions.",
+      "reason": "More concise and natural phrasing."
+    },
+    {
+      "source": "This guide will walk you through the essential differences between dental implants and dentures in a clear, straightforward way.",
+      "replacement": "This guide explains key differences between dental implants and dentures clearly and simply.",
+      "reason": "More concise and natural tone."
+    },
+    {
+      "source": "Dental implants are a tooth replacement option designed to imitate your natural teeth as closely as possible\u2014in both look and function.",
+      "replacement": "Dental implants replace teeth by mimicking natural teeth in looks and function.",
+      "reason": "Shorter and more direct sentence."
+    },
+    {
+      "source": "Because they anchor directly to the jawbone, implants offer strong stability and help maintain bone health where teeth are missing.",
+      "replacement": "Anchored to the jawbone, implants provide stability and help keep the bone healthy.",
+      "reason": "Shortened sentence for readability."
+    },
+    {
+      "source": "In most dental practices in your area, dental implants have become widely available and accepted as a preferred restoration method due to their durability and natural feel.",
+      "replacement": "Dental implants are widely available locally and preferred for their durability and natural feel.",
+      "reason": "Simplified phrasing and removed redundancy."
+    },
+    {
+      "source": "Traditional dentures rest on your gums, although some can be anchored to dental implants for added stability.",
+      "replacement": "Traditional dentures rest on gums, though some can attach to implants for extra stability.",
+      "reason": "More concise wording."
+    },
+    {
+      "source": "Many patients find they need denture adhesives to keep them secure, and these prosthetics must be removed daily for cleaning.",
+      "replacement": "Many patients use adhesives to secure dentures, which must be removed daily for cleaning.",
+      "reason": "Shortened sentence for better flow."
+    },
+    {
+      "source": "Getting dental implants involves a surgical procedure where the titanium posts are placed into your jawbone.",
+      "replacement": "Getting implants involves surgery to place titanium posts in the jawbone.",
+      "reason": "Simplified and shortened sentence."
+    },
+    {
+      "source": "Healing and integration (called osseointegration) take time \u2014 typically between 3 to 6 months.",
+      "replacement": "Healing and integration (osseointegration) usually take 3 to 6 months.",
+      "reason": "More concise and natural phrasing."
+    },
+    {
+      "source": "In some cases, especially where bone loss has occurred, a bone graft may be necessary before implant placement, adding to treatment time.",
+      "replacement": "Sometimes, a bone graft is needed before implants if bone loss has occurred, extending treatment time.",
+      "reason": "More direct and clearer sentence."
+    },
+    {
+      "source": "Dentures require no surgery and can generally be fitted in a matter of weeks.",
+      "replacement": "Dentures need no surgery and can usually be fitted within weeks.",
+      "reason": "Smoother and shorter phrasing."
+    },
+    {
+      "source": "Regarding pain, implants may cause mild postoperative discomfort or swelling, usually manageable with over-the-counter pain relief.",
+      "replacement": "Implants may cause mild swelling or discomfort, typically eased with over-the-counter painkillers.",
+      "reason": "Simplified explanation."
+    },
+    {
+      "source": "Dental implants are known for their lasting power.",
+      "replacement": "Dental implants are known for their durability.",
+      "reason": "More succinct wording."
+    },
+    {
+      "source": "Dentures generally need to be replaced or relined every 5 to 8 years due to changes in your gums and bone structure.",
+      "replacement": "Dentures usually need replacement or relining every 5 to 8 years as gums and bone change.",
+      "reason": "Shortened and clearer."
+    },
+    {
+      "source": "One of the significant benefits of implants is their role in preserving the jawbone.",
+      "replacement": "A key benefit of implants is preserving the jawbone.",
+      "reason": "Simplified and direct."
+    },
+    {
+      "source": "Dentures do not provide this stimulation; without it, bone loss can continue underneath the denture, potentially changing the fit and leading to gum irritation over time.",
+      "replacement": "Dentures don\u2019t stimulate the bone, so bone loss can continue, affecting fit and causing irritation.",
+      "reason": "Shorter, clearer phrasing."
+    },
+    {
+      "source": "Dental implants offer permanence, natural feel, and support for your jawbone, making them ideal for those seeking a long-term solution.",
+      "replacement": "Dental implants offer lasting, natural-feeling teeth and support jawbone health, ideal for long-term solutions.",
+      "reason": "Improved readability and flow."
+    },
+    {
+      "source": "Choosing the best option depends on your oral health, budget, comfort preferences, and personal goals.",
+      "replacement": "The best choice depends on your oral health, budget, comfort, and goals.",
+      "reason": "Simplified sentence."
+    },
+    {
+      "source": "With advances in dental care, both options now offer better outcomes than ever before \u2014 so you can restore your smile and confidence effectively.",
+      "replacement": "Advances in dental care mean both options now provide better results to restore your smile and confidence.",
+      "reason": "Shortened and clearer."
+    }
+  ]
+}

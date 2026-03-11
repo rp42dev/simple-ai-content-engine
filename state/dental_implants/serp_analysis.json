@@ -1,0 +1,103 @@
+{
+  "topic": "Dental Implants",
+  "pillar": {
+    "query": "The Ultimate Guide to Dental Implants: Benefits, Types, and Long-Term Care",
+    "top_headings": [
+      "Introduction to Dental Implants",
+      "Benefits of Dental Implants",
+      "Types of Dental Implants",
+      "Dental Implant Procedure Overview",
+      "Who is a Candidate for Dental Implants?",
+      "Potential Risks and Complications",
+      "Long-Term Care and Maintenance of Dental Implants",
+      "Cost and Financing Options",
+      "FAQs about Dental Implants",
+      "Conclusion and Next Steps"
+    ],
+    "questions": [
+      "What are dental implants and how do they work?",
+      "What are the main benefits of choosing dental implants?",
+      "What types of dental implants are available?",
+      "How is the dental implant procedure performed?",
+      "Am I a good candidate for dental implants?",
+      "What are the risks associated with dental implants?",
+      "How should I care for my dental implants over time?",
+      "How long do dental implants typically last?"
+    ],
+    "recommended_word_range": "1500-1800",
+    "notes": [
+      "For broad \u2018ultimate guide\u2019 style content, aim for comprehensive coverage to serve as a pillar page.",
+      "Include detailed explanations for types and benefits to address varied user intents.",
+      "Cover patient candidacy and procedural expectations to alleviate common concerns.",
+      "Long-term care is crucial for sustained patient outcomes \u2014 provide actionable tips.",
+      "Include an FAQ section to address common questions not fully covered in main headings.",
+      "Emphasize clarity and depth, balancing technical accuracy with user-friendly language."
+    ]
+  },
+  "spokes": {
+    "Step-by-Step Dental Implant Procedure: What to Expect Before, During, and After Surgery": {
+      "query": "Step-by-Step Dental Implant Procedure: What to Expect Before, During, and After Surgery",
+      "top_headings": [
+        "Overview of Dental Implants",
+        "Initial Consultation and Assessment",
+        "Pre-Surgery Preparations",
+        "Step-by-Step Surgical Procedure",
+        "Post-Surgery Care and Recovery",
+        "Potential Risks and Complications",
+        "Follow-Up Appointments and Long-Term Maintenance"
+      ],
+      "questions": [
+        "What happens during the initial dental implant consultation?",
+        "How should I prepare for dental implant surgery?",
+        "What are the exact steps involved in the dental implant surgery?",
+        "How long is the recovery period after the implant procedure?",
+        "What kind of pain or discomfort should I expect after surgery?",
+        "Are there any dietary restrictions post-surgery?",
+        "What are the common risks or complications?",
+        "How often should I have follow-up visits after dental implants?"
+      ],
+      "recommended_word_range": "1500-1800",
+      "notes": [
+        "Given the comprehensive nature of the query, a detailed step-by-step guide covering pre-surgery, surgery, and post-surgery phases is preferred.",
+        "Content should be structured from initial consultation through long-term maintenance to address user intent fully.",
+        "Inclusion of common patient questions and concerns helps build a thorough resource.",
+        "Adding sections on risks, recovery expectations, and follow-up care signals content depth and thoroughness.",
+        "Use clear subheadings to organize stages clearly, improving user experience and SEO relevance."
+      ]
+    },
+    "Dental Implants vs. Dentures: Which Tooth Replacement Option Is Right for You?": {
+      "query": "Dental Implants vs. Dentures: Which Tooth Replacement Option Is Right for You?",
+      "top_headings": [
+        "Overview of Tooth Replacement Options",
+        "What Are Dental Implants?",
+        "What Are Dentures?",
+        "Comparison of Dental Implants vs. Dentures",
+        "Benefits of Dental Implants",
+        "Benefits of Dentures",
+        "Considerations and Limitations of Each Option",
+        "Cost Comparison",
+        "Procedure and Timeline Differences",
+        "Longevity and Maintenance Requirements"
+      ],
+      "questions": [
+        "What are the main differences between dental implants and dentures?",
+        "How long do dental implants and dentures last?",
+        "Which option is more comfortable?",
+        "What is the cost difference between dental implants and dentures?",
+        "How does each option affect oral health?",
+        "What are the maintenance requirements for implants vs dentures?",
+        "Who is eligible for dental implants?",
+        "Are dentures a good option for all patients?"
+      ],
+      "recommended_word_range": "1500-1800",
+      "notes": [
+        "This topic is a broad comparison that functions as a main guide or pillar content, so comprehensive coverage is recommended.",
+        "Content should balance technical explanation with patient-centered concerns like comfort, cost, and candidacy.",
+        "Include detailed sections addressing common FAQs found recurrently in user queries to improve topical authority and relevance.",
+        "A structure that contrasts features side-by-side aids clarity\u2014consider tables or bullet points in the main comparison section.",
+        "Address both functional and aesthetic outcomes to reflect user decision drivers.",
+        "Including procedure timelines and maintenance tips adds valuable depth to user understanding."
+      ]
+    }
+  }
+}

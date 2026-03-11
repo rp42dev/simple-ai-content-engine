@@ -7,6 +7,45 @@ and this project uses a release-style version history starting from the current 
 
 ## [Unreleased]
 
+## [0.4.0-beta.1] - 2026-03-11
+
+### Added
+- Expanded pipeline to **11 phases** (from 7): added Cluster Map Generation (phase 1), SERP Analysis (phase 3), Humanization & Readability (phase 10), and Article Quality Assurance (phase 11).
+- `engine/pipeline/phase_logging.py`: standardized phase skip log format (`Skipping: phase=... topic="..." reason=...`).
+- Minimal P0 regression suite in `tests/test_p0_regressions.py` covering:
+  - `--topic-limit` queue slicing and priority order behavior.
+  - `--topic` precedence over queue slicing.
+  - `state_version` defaults and schema normalization for legacy/typed values.
+- Run traceability in pipeline execution:
+  - Generated `run_id` emitted per run.
+  - Per-run summary artifacts written to `outputs/run_summaries/*.json` with config, selected topics, phase statuses/timings, and final status.
+  - Standardized phase skip logs captured into summary `skips` per phase.
+  - Regression coverage for success and failure summary writing paths.
+  - CLI run-summary inspector commands: `--last-run` and `--run-id`.
+  - `--run-list [N]` to list recent run summaries.
+  - `--failed-only` filter for `--run-list`.
+  - `--json` output mode for `--last-run`, `--run-id`, and `--run-list`.
+- Config profile system: `config/profile_defaults.json`, `config/profile_resolver.py`, `config/policies/`.
+- `tools/article_post_processor.py`: post-processing transformations for generated articles.
+- CrewAI framework compliance section in `docs/DEV_RULES.md`:
+  - Requires use of `Crew`, `Flow`, `Task`, and hierarchical process for all AI-assisted coding.
+  - Prohibits manual loops or custom orchestration.
+  - Enforces ARCHITECTURE.md/ROADMAP.md checks before modifying flows or agents.
+  - No new planning docs policy — always update existing ones.
+
+### Changed
+- CLI execution controls now distinguish between topic batching and spoke depth:
+  - Added `--topic-limit` to cap number of topics processed from prioritized queue.
+  - Added `--spoke-limit` as explicit spoke generation cap per topic.
+  - Kept `--limit` as a backward-compatible alias for `--spoke-limit`.
+- State management is now versioned and normalized:
+  - Added `state_version` schema stamping on load/save.
+  - Added compatibility normalization for legacy keys and value types.
+  - Added atomic state writes to reduce partial-write risk.
+- Dashboard topic state load/save now routes through `tools/state_manager.py` for consistent validation behavior.
+- `docs/ARCHITECTURE.md` updated to reflect 11-phase pipeline, all actual tools, and current repo structure.
+- `docs/ROADMAP.md` Short Term Goals updated to mark completed P0/P1 items.
+
 ## [0.3.0-beta.1] - 2026-03-09
 
 ### Added

@@ -1,0 +1,18 @@
+{
+  "industry": "finance",
+  "compliance_level": "strict",
+  "tone": "clear_cautious",
+  "cta_style": "educational",
+  "evidence_required": true,
+  "readability_target": "grade_8_10",
+  "forbidden_phrases": [
+    "guaranteed returns",
+    "risk-free investment",
+    "beat the market every time"
+  ],
+  "style_notes": [
+    "Use balanced language and discuss risk clearly",
+    "Avoid promises of outcomes",
+    "Include suitability caveats for individual circumstances"
+  ]
+}

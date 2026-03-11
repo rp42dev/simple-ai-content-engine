@@ -1,0 +1,94 @@
+{
+  "phrase_rewrites": [
+    {
+      "source": "Questions often come up: Will the treatment be painful? How long will recovery take? What does the process involve, and how much will it cost?",
+      "replacement": "You may wonder: Will it be painful? How long does recovery take? What does the process involve? And how much will it cost?",
+      "reason": "Shortens and simplifies the sentence for better flow."
+    },
+    {
+      "source": "Dental implants offer a modern and reliable solution that looks and feels natural.",
+      "replacement": "Dental implants provide a reliable, natural-looking and feeling solution.",
+      "reason": "More concise wording."
+    },
+    {
+      "source": "Dental implants are small posts made of titanium, designed to replace the roots of missing teeth.",
+      "replacement": "Dental implants are small titanium posts that replace missing tooth roots.",
+      "reason": "Simplifies the sentence and removes wordiness."
+    },
+    {
+      "source": "clinics in your area often provide this initial step with imaging included, so you get a clear picture of your dental needs and options before proceeding.",
+      "replacement": "Many clinics offer this initial step with imaging, giving you a clear view of your dental needs and options.",
+      "reason": "Simplifies wording and improves flow."
+    },
+    {
+      "source": "On the day of surgery, here\u2019s what typically happens:",
+      "replacement": "On surgery day, here\u2019s what usually happens:",
+      "reason": "Shorter and more natural phrasing."
+    },
+    {
+      "source": "Sometimes additional procedures like bone grafts or sinus lifts are done alongside, especially if your jawbone needs extra support.",
+      "replacement": "Additional procedures like bone grafts or sinus lifts may be done if your jawbone needs extra support.",
+      "reason": "Simplifies the sentence."
+    },
+    {
+      "source": "After surgery, you can expect:",
+      "replacement": "After surgery, expect:",
+      "reason": "More concise."
+    },
+    {
+      "source": "To support healing:",
+      "replacement": "To help healing:",
+      "reason": "Simpler wording."
+    },
+    {
+      "source": "The implant will need to fuse with your bone in a process called **osseointegration**, which takes about 3 to 6 months.",
+      "replacement": "The implant needs to fuse with your bone through **osseointegration**, taking about 3 to 6 months.",
+      "reason": "Shortens sentence and improves readability."
+    },
+    {
+      "source": "Many local clinics provide ongoing patient support during recovery to address questions or needs as they arise.",
+      "replacement": "Many clinics offer ongoing support during recovery to answer your questions as they come up.",
+      "reason": "Simplifies wording."
+    },
+    {
+      "source": "Prices vary depending on clinic location, complexity of your case, and the materials used.",
+      "replacement": "Costs vary based on clinic location, case complexity, and materials used.",
+      "reason": "Shortens and clarifies."
+    },
+    {
+      "source": "Although implants may seem costly upfront, their longevity and durability often make them a more cost-effective choice than repeatedly replacing bridges or dentures.",
+      "replacement": "While implants may seem costly at first, their durability often makes them more cost-effective than repeatedly replacing bridges or dentures.",
+      "reason": "Improves flow and removes redundant phrasing."
+    },
+    {
+      "source": "Choosing an experienced dental surgeon and following aftercare instructions closely minimize these risks.",
+      "replacement": "Choosing an experienced surgeon and following aftercare instructions reduces these risks.",
+      "reason": "Simplifies and makes more direct."
+    },
+    {
+      "source": "Individual factors such as smoking, uncontrolled diabetes, or poor oral hygiene can affect success, so honest communication with your dentist is essential.",
+      "replacement": "Factors like smoking, uncontrolled diabetes, or poor oral hygiene can affect success, so be open with your dentist.",
+      "reason": "Simplifies phrasing to sound more conversational and patient-friendly."
+    },
+    {
+      "source": "Most patients can return to normal activities quite quickly, usually within a few days, but it's important to avoid strenuous exercise initially.",
+      "replacement": "Most patients return to normal activities within a few days but should avoid strenuous exercise at first.",
+      "reason": "Shortens sentence without losing meaning."
+    },
+    {
+      "source": "Long-term success depends on maintaining good oral hygiene and attending regular dental check-ups approximately every six months to monitor the implant\u2019s health.",
+      "replacement": "Long-term success requires good oral hygiene and regular dental check-ups every six months to monitor your implant.",
+      "reason": "Simplifies language and improves flow."
+    },
+    {
+      "source": "The full healing and integration process gradually allows your new implant to function just like a natural tooth.",
+      "replacement": "Once fully healed and integrated, your implant will function like a natural tooth.",
+      "reason": "Shortens sentence for clarity."
+    },
+    {
+      "source": "If you\u2019re considering dental implants, discussing your personal health and treatment options with your dentist is key to a successful outcome.",
+      "replacement": "If you're considering dental implants, discussing your health and options with your dentist is key to success.",
+      "reason": "More concise phrasing."
+    }
+  ]
+}

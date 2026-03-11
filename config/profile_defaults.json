@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "industry": "generic_business",
+  "topic_type": "pillar",
+  "language": "en",
+  "audience": "general",
+  "tone": "professional",
+  "intent": "informational",
+  "compliance_level": "standard",
+  "brand_voice": "clear, trustworthy, practical",
+  "cta_style": "consultative",
+  "evidence_required": false,
+  "readability_target": "grade_8_10",
+  "currency": "",
+  "region": ""
+}

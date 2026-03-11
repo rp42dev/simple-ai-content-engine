@@ -1,0 +1,18 @@
+{
+  "industry": "healthcare",
+  "compliance_level": "strict",
+  "tone": "reassuring_professional",
+  "cta_style": "consultative",
+  "evidence_required": true,
+  "readability_target": "grade_7_9",
+  "forbidden_phrases": [
+    "guaranteed cure",
+    "zero risk",
+    "instant permanent results"
+  ],
+  "style_notes": [
+    "Use patient-friendly, non-alarmist language",
+    "Avoid overpromising outcomes",
+    "Encourage consultation for individual suitability"
+  ]
+}

@@ -1,5 +1,61 @@
 # AI Content Engine Architecture
 
+## Quick Visual
+
+### Simple Flow
+
+```text
+topics_queue.json
+  ↓
+main.py / pipeline runner
+  ↓
+engine/pipeline/phases/*
+  ↓
+crews/content_crew.py
+  ↓
+CrewAI Agents + Tasks
+  ↓
+outputs/*.md, *_seo.md, *_final.md, *_cluster.json
+  ↓
+SEO + Link Injection + Humanization + Publish-ready Articles
+```
+
+### Slightly Expanded View
+
+```text
+      dashboard.py (temporary UI)
+          │
+          │ triggers / monitors
+          ▼
+topics_queue.json → Pipeline Engine → Phase Modules → CrewAI Crews → Artifacts
+    │                │                 │               │              │
+    │                │                 │               │              └─ final articles
+    │                │                 │               └─ agents + tasks
+    │                │                 └─ 7 execution phases
+    │                └─ run control + summaries
+    └─ topic input
+
+          Pipeline Engine ↔ tools/state_manager.py ↔ state/*.json
+                   │
+                   └─ progress, approvals, resume/retry
+```
+
+### Mermaid Diagram
+
+```mermaid
+flowchart TD
+  Q[Topic Queue\ntopics_queue.json] --> R[Pipeline Engine\nmain.py + runner.py]
+  R --> P[Phase Modules\n7 pipeline phases]
+  P --> C[CrewAI Crews\ncontent_crew.py]
+  C --> A[Agents + Tasks\nstrategist writer SEO intelligence]
+  A --> O[Artifacts\ncluster drafts SEO final]
+  O --> F[Final Articles\npublish-ready markdown]
+
+  R <--> S[State Manager\nstate/*.json]
+  D[Dashboard\ndashboard.py] --> R
+  D --> S
+```
+
 ## Purpose
 This document defines the current architecture, target repository layout, and execution/data flow for long-term development.
 
@@ -23,17 +79,25 @@ The current dashboard is a temporary operations surface and does not define the 
 ### Tools
 - `tools/state_manager.py`: workflow state persistence by topic.
 - `tools/link_injector.py`: resolves placeholder links into concrete article filenames.
+- `tools/article_post_processor.py`: post-processing transformations applied to generated articles.
 - `tools/search_tools.py`: crawling/scraping tool access.
 - `tools/wordpress_tool.py`: optional publishing integration.
 
 ### Pipeline Orchestration
-Current execution in `main.py` is phase-based and queue-driven:
-1. Cluster Strategy
-2. Pillar + Spoke Generation
-3. SEO Optimization
-4. Final Link Injection
+Current execution in `engine/pipeline/runner.py` is phase-based and queue-driven (11 phases in execution order):
+1. Cluster Map Generation
+2. Cluster Strategy
+3. SERP Analysis
+4. Pillar Generation
+5. Spoke Generation
+6. SEO Optimization
+7. Intelligence Gap Detection
+8. Cluster Scaling
+9. Final Link Injection
+10. Humanization & Readability
+11. Article Quality Assurance
 
-Intelligence and scaling capabilities exist in the codebase (`run_intelligence_crew`, queue/state model) and should be formalized as first-class phases in the target architecture.
+`main.py` is a thin CLI entrypoint delegating to `engine.pipeline.flow_spike.run_pipeline_entry`, which calls `runner.run_pipeline`.
 
 ### State Handling
 - State is JSON-file based under `state/`.
@@ -53,18 +117,23 @@ Intelligence and scaling capabilities exist in the codebase (`run_intelligence_c
 
 ## Canonical Pipeline (Must Preserve)
 
-The conceptual pipeline for long-term architecture is:
-1. Cluster Strategy
-2. Pillar Article Generation
-3. Spoke Article Generation
-4. SEO Optimization
-5. Intelligence (Content Gap Detection)
-6. Cluster Scaling
-7. Final Link Injection
+The canonical 11-phase pipeline (matches `engine/pipeline/runner.py` execution order):
+1. Cluster Map Generation
+2. Cluster Strategy
+3. SERP Analysis
+4. Pillar Article Generation
+5. Spoke Article Generation
+6. SEO Optimization
+7. Intelligence Gap Detection
+8. Cluster Scaling
+9. Final Link Injection
+10. Humanization & Readability
+11. Article Quality Assurance
 
 Notes:
-- Phase 2 and 3 may execute in one production stage internally, but must remain separately tracked.
-- Phase 6 uses intelligence outputs to add/refine spokes and schedule incremental production runs.
+- Phases 4 and 5 may execute in one production stage internally, but must remain separately tracked.
+- Phase 8 uses intelligence outputs to add/refine spokes and schedule incremental production runs.
+- All phase IDs must remain stable — they are referenced by state keys and run summaries.
 
 ---
 
@@ -77,13 +146,17 @@ ai-content-engine/
     pipeline/
       runner.py                # Phase scheduler + execution graph
       phases/
+        cluster_map_generation.py
         cluster_strategy.py
+        serp_analysis.py
         pillar_generation.py
         spoke_generation.py
         seo_optimization.py
         intelligence_gap_detection.py
         cluster_scaling.py
         final_link_injection.py
+        humanization_readability.py
+        article_quality_assurance.py
     models/
       topic.py                 # Topic/work item models
       cluster.py               # Cluster/spoke contracts
@@ -110,7 +183,9 @@ ai-content-engine/
     content_crew.py            # Transitional adapter; eventually optional
 
   tools/
+    state_manager.py
     link_injector.py
+    article_post_processor.py
     search_tools.py
     wordpress_tool.py
 

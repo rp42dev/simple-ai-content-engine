@@ -105,7 +105,23 @@ Always test in increments before moving to broader runs:
 
 ---
 
-## 4) Architecture Documentation Update Policy
+## 4) CrewAI Framework Compliance
+
+### AI-Assisted Coding Requirements
+All AI-assisted coding (Copilot, agents, etc.) must follow the CrewAI framework strictly:
+- Use `Crew`, `Flow`, `Task`, and hierarchical process first.
+- Do not create manual loops or custom orchestration.
+- Check for required CrewAI imports/modules and add if missing.
+
+### Workflow Enforcement
+- Check `docs/ARCHITECTURE.md` before modifying flows or agents.
+- Follow `docs/ROADMAP.md` for priorities.
+- Update `CHANGELOG.md` and `docs/RELEASE_CHECKLIST.md` as usual.
+- No new planning docs — always update existing ones.
+
+---
+
+## 5) Architecture Documentation Update Policy
 
 Update `docs/ARCHITECTURE.md` whenever any of these changes occur:
 - New phase added, removed, or reordered.
@@ -120,7 +136,7 @@ Required in same PR:
 
 ---
 
-## 5) Dashboard Evolution Guidance
+## 6) Dashboard Evolution Guidance
 
 Current dashboard is temporary and operational.
 

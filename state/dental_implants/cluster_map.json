@@ -1,0 +1,26 @@
+{
+  "topic": "Dental Implants",
+  "pillar": "The Ultimate Guide to Dental Implants: Benefits, Types, and Long-Term Care",
+  "spokes": [
+    {
+      "title": "Step-by-Step Dental Implant Procedure: What to Expect Before, During, and After Surgery",
+      "intent": "informational"
+    },
+    {
+      "title": "Dental Implants vs. Dentures: Which Tooth Replacement Option Is Right for You?",
+      "intent": "comparison"
+    },
+    {
+      "title": "How Much Do Dental Implants Cost in 2024? Factors Influencing Price and Payment Options",
+      "intent": "commercial"
+    },
+    {
+      "title": "Common Risks and Complications of Dental Implants and How to Avoid Them",
+      "intent": "informational"
+    },
+    {
+      "title": "Bone Grafting for Dental Implants: When It's Needed and What the Procedure Involves",
+      "intent": "supporting"
+    }
+  ]
+}
