@@ -7,6 +7,23 @@ and this project uses a release-style version history starting from the current 
 
 ## [Unreleased]
 
+## [0.5.1-beta.1] - 2026-03-11
+
+### Added
+- `engine/pipeline/phases/cluster_scaling.py`: full implementation of the cluster scaling loop:
+  - Parses `outputs/{slug}_intelligence.md` (JSON array written by Phase 5) into structured spoke candidates.
+  - Scores each candidate's confidence level (0.5–0.9) using heuristic keyword signals in the justification text (e.g. `significant gap` → 0.9, `important` → 0.8, `lacks` → 0.7, `consider` → 0.6).
+  - Deduplicates candidates against currently mapped spokes in the cluster map.
+  - Persists approved spoke backlog to `state/{slug}/spoke_backlog.json` via new `save_spoke_backlog()` helper.
+  - Sets `cluster_scaled=True` and `spoke_backlog_saved=True` in workflow state.
+  - Prints summary: total candidates found + count at or above `CONFIDENCE_THRESHOLD` (0.7).
+  - Strips optional markdown code-fence wrapper when parsing intelligence output files.
+- `tools/state_manager.py`:
+  - `spoke_backlog_path(topic)`: path helper for `state/{slug}/spoke_backlog.json`.
+  - `save_spoke_backlog(topic, backlog)` and `load_spoke_backlog(topic)`: persistence helpers using atomic temp-file write pattern.
+  - `spoke_backlog_saved` boolean key added to `_default_state()` and `_normalize_state()` bool-coercion list.
+- 19 new `ClusterScalingTests` covering: confidence scoring at all 4 tiers, existing-spoke deduplication, backlog entry structure, skip-when-scaled, skip-when-intelligence-pending, state flag assertion, empty-intelligence graceful handling, missing/invalid JSON file resilience, and markdown fence stripping.
+
 ## [0.5.0-beta.1] - 2026-03-11
 
 ### Added
