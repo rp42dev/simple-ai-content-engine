@@ -80,6 +80,10 @@ def run(queue):
             log_phase_skip("final_link_injection", topic, "completed")
             continue
 
+        if not state.get("seo_optimized"):
+            log_phase_skip("final_link_injection", topic, "seo_pending")
+            continue
+
         print(f"Finalizing Links for {topic} cluster...")
 
         all_article_files = [f for f in os.listdir("outputs") if _is_canonical_article_file(f)]

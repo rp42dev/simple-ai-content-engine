@@ -43,6 +43,7 @@ def run(queue, limit):
         cluster_file = os.path.join("outputs", f"{topic_slug}_cluster.json")
 
         if not os.path.exists(cluster_file):
+            log_phase_skip("spoke_generation", topic, "missing_prerequisite", detail="cluster_strategy")
             continue
         if not state.get("cluster_approved", False):
             log_phase_skip("spoke_generation", topic, "cluster_approval_pending")

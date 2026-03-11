@@ -54,8 +54,13 @@ def run(queue):
             log_phase_skip("seo_optimization", topic, "completed")
             continue
 
+        if not state.get("pillar_written"):
+            log_phase_skip("seo_optimization", topic, "writing_pending")
+            continue
+
         cluster_file = os.path.join("outputs", f"{topic_slug}_cluster.json")
         if not os.path.exists(cluster_file):
+            log_phase_skip("seo_optimization", topic, "missing_prerequisite", detail="cluster_strategy")
             continue
 
         print(f"Optimizing: {topic}...")
