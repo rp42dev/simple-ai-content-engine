@@ -9,13 +9,17 @@
 - [ ] `docs:`
 
 ## Pipeline Impact
-- [ ] Phase 1: Cluster Strategy
-- [ ] Phase 2: Pillar Article Generation
-- [ ] Phase 3: Spoke Article Generation
-- [ ] Phase 4: SEO Optimization
-- [ ] Phase 5: Intelligence (Content Gap Detection)
-- [ ] Phase 6: Cluster Scaling
-- [ ] Phase 7: Final Link Injection
+- [ ] Phase 1: Cluster Map Generation
+- [ ] Phase 2: Cluster Strategy
+- [ ] Phase 3: SERP Analysis
+- [ ] Phase 4: Pillar Generation
+- [ ] Phase 5: Spoke Generation
+- [ ] Phase 6: SEO Optimization
+- [ ] Phase 7: Intelligence Gap Detection
+- [ ] Phase 8: Cluster Scaling
+- [ ] Phase 9: Final Link Injection
+- [ ] Phase 10: Humanization & Readability
+- [ ] Phase 11: Article Quality Assurance
 - [ ] No pipeline behavior change
 
 ## Incremental Testing (Required)
@@ -32,6 +36,9 @@
 - [ ] State transitions validated for affected phases
 - [ ] Artifact progression validated (`.md`, `_seo.md`, `_final.md`)
 - [ ] Rerun behavior is idempotent for completed work
+- [ ] Queue scoping validated via `engine/pipeline/phase_registry.apply_scope`
+- [ ] No queue filtering in runner or phases (registry is source of truth)
+- [ ] Run summaries present (`outputs/run_summaries/`) with expected topics and queue_size
 
 ## Docs & Changelog
 - [ ] `docs/ARCHITECTURE.md` updated (if architecture changed)
