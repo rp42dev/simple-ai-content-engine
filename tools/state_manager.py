@@ -74,6 +74,10 @@ def qa_summary_path(topic):
     return topic_state_dir(topic) / "qa_report.json"
 
 
+def spoke_backlog_path(topic):
+    return topic_state_dir(topic) / "spoke_backlog.json"
+
+
 def _default_state(topic=None):
     return {
         "state_version": STATE_VERSION,
@@ -90,6 +94,7 @@ def _default_state(topic=None):
         "seo_optimized": False,
         "intelligence_completed": False,
         "cluster_scaled": False,
+        "spoke_backlog_saved": False,
         "links_injected": False,
         "humanized": False,
         "qa_reviewed": False,
@@ -141,6 +146,7 @@ def _normalize_state(data, topic=None):
         "seo_optimized",
         "intelligence_completed",
         "cluster_scaled",
+        "spoke_backlog_saved",
         "links_injected",
         "humanized",
         "qa_reviewed",
@@ -349,6 +355,15 @@ def save_qa_summary(topic, payload):
 
 def load_qa_summary(topic):
     return _load_topic_payload(qa_summary_path(topic))
+
+
+def save_spoke_backlog(topic, backlog):
+    _save_topic_payload(spoke_backlog_path(topic), backlog)
+
+
+def load_spoke_backlog(topic):
+    return _load_topic_payload(spoke_backlog_path(topic))
+
 
 def update_state(key, value, topic=None):
     """Update a single value in the state"""

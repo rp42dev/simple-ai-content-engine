@@ -183,7 +183,7 @@ ai-content-engine/
     content_crew.py            # Transitional adapter; eventually optional
 
   tools/
-    state_manager.py
+    state_manager.py           # Per-topic state: load/save/update; spoke_backlog_path; save/load_spoke_backlog
     link_injector.py
     article_post_processor.py
     search_tools.py
@@ -192,6 +192,8 @@ ai-content-engine/
   state/
     workflow_state.json
     workflow_<topic>.json
+    <slug>/
+      spoke_backlog.json       # Cluster scaling output: scored + deduplicated spoke candidates
 
   outputs/
     *.json

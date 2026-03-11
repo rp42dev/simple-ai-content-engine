@@ -72,9 +72,11 @@
    - Keep writer/SEO deterministic with artifact-driven contracts.
    - Add simple memory metrics (recall count, reuse quality notes).
 
-3. **P1: Cluster scaling loop**
-   - Convert intelligence results into actionable spoke backlog.
-   - Add confidence score + manual approval gate for new scale candidates.
+3. **P1: Cluster scaling loop** [DONE]
+   - Intelligence results parsed into structured spoke backlog with confidence scores.
+   - Candidates deduplicated against existing cluster map.
+   - Backlog persisted to `state/{slug}/spoke_backlog.json` with `approved: false` gate.
+   - Spoke backlog load/save helpers added to `state_manager.py`.
 
 4. **P2: Dashboard evolution (temporary UI)**
    - Move Streamlit app to `frontend/streamlit/app.py`.

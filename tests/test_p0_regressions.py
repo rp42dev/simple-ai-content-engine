@@ -12,6 +12,7 @@ from engine.pipeline import helpers
 from engine.pipeline import runner
 from engine.pipeline import phase_registry
 from engine.pipeline.phases import article_quality_assurance as qa_phase
+from engine.pipeline.phases import cluster_scaling as cs_phase
 from tools import article_post_processor
 from tools import state_manager
 
@@ -895,6 +896,213 @@ class PhaseRegistryTests(unittest.TestCase):
 
         self.assertEqual((queue, 8), call_log["cluster_map_generation"])
         self.assertEqual((queue, 5), call_log["spoke_generation"])
+
+
+class ClusterScalingTests(unittest.TestCase):
+    def _base_state(self, **overrides):
+        state = {
+            "cluster_scaled": False,
+            "intelligence_completed": True,
+            "cluster_generated": True,
+            "spoke_backlog_saved": False,
+        }
+        state.update(overrides)
+        return state
+
+    def _sample_gap_items(self):
+        return [
+            {
+                "gap_topic": "Big SEO Gap",
+                "justification": "There is a significant gap in competitor coverage.",
+                "suggested_new_sub_topic": "Filling the SEO Gap",
+            },
+            {
+                "gap_topic": "Minor Topic",
+                "justification": "You could consider adding this topic.",
+                "suggested_new_sub_topic": "Minor Topic Article",
+            },
+        ]
+
+    # ---- helper unit tests -----------------------------------------------
+
+    def test_score_confidence_high_signal(self):
+        self.assertEqual(0.9, cs_phase._score_confidence("There is a significant gap here"))
+
+    def test_score_confidence_medium_high_signal(self):
+        self.assertEqual(0.8, cs_phase._score_confidence("This is an important topic to cover"))
+
+    def test_score_confidence_medium_signal(self):
+        self.assertEqual(0.7, cs_phase._score_confidence("Our content lacks this topic currently"))
+
+    def test_score_confidence_lower_medium_signal(self):
+        self.assertEqual(0.6, cs_phase._score_confidence("You could consider adding this"))
+
+    def test_score_confidence_default(self):
+        self.assertEqual(0.5, cs_phase._score_confidence("A nice topic for the future"))
+
+    def test_existing_spoke_titles_returns_lowercase_set(self):
+        cluster_map = {
+            "pillar_topic": "Test",
+            "spoke_topics": [
+                {"sub_topic": "Invisalign Treatment Process"},
+                {"sub_topic": "Braces vs Aligners"},
+            ],
+        }
+        result = cs_phase._existing_spoke_titles(cluster_map)
+        self.assertIn("invisalign treatment process", result)
+        self.assertIn("braces vs aligners", result)
+
+    def test_existing_spoke_titles_empty_for_none_and_empty_map(self):
+        self.assertEqual(set(), cs_phase._existing_spoke_titles(None))
+        self.assertEqual(set(), cs_phase._existing_spoke_titles({}))
+
+    def test_build_backlog_excludes_existing_spokes(self):
+        gap_items = [
+            {"gap_topic": "Gap", "justification": "significant gap", "suggested_new_sub_topic": "New Topic"},
+            {"gap_topic": "Dup", "justification": "important", "suggested_new_sub_topic": "Existing Topic"},
+        ]
+        result = cs_phase._build_backlog(gap_items, {"existing topic"})
+        self.assertEqual(1, len(result))
+        self.assertEqual("New Topic", result[0]["title"])
+
+    def test_build_backlog_entry_structure(self):
+        gap_items = [
+            {
+                "gap_topic": "SEO Gap",
+                "justification": "there is a significant gap in competitor content",
+                "suggested_new_sub_topic": "New Spoke Title",
+            },
+        ]
+        result = cs_phase._build_backlog(gap_items, set())
+        self.assertEqual(1, len(result))
+        entry = result[0]
+        self.assertEqual("New Spoke Title", entry["title"])
+        self.assertEqual("SEO Gap", entry["intent"])
+        self.assertEqual(0.9, entry["confidence"])
+        self.assertEqual("intelligence", entry["source"])
+        self.assertFalse(entry["approved"])
+
+    def test_build_backlog_skips_items_missing_title(self):
+        gap_items = [
+            {"gap_topic": "No Title", "justification": "important", "suggested_new_sub_topic": ""},
+            {"gap_topic": "Has Title", "justification": "gaps", "suggested_new_sub_topic": "Valid Title"},
+        ]
+        result = cs_phase._build_backlog(gap_items, set())
+        self.assertEqual(1, len(result))
+        self.assertEqual("Valid Title", result[0]["title"])
+
+    # ---- run() integration tests -----------------------------------------
+
+    def test_run_skips_when_already_scaled(self):
+        queue = [{"topic": "Dental Implants"}]
+        state = self._base_state(cluster_scaled=True)
+        with mock.patch("engine.pipeline.phases.cluster_scaling.load_state", return_value=state):
+            with mock.patch("engine.pipeline.phases.cluster_scaling.save_spoke_backlog") as mock_save:
+                cs_phase.run(queue)
+        mock_save.assert_not_called()
+
+    def test_run_skips_when_intelligence_pending(self):
+        queue = [{"topic": "Dental Implants"}]
+        state = self._base_state(intelligence_completed=False)
+        with mock.patch("engine.pipeline.phases.cluster_scaling.load_state", return_value=state):
+            with mock.patch("engine.pipeline.phases.cluster_scaling.save_spoke_backlog") as mock_save:
+                cs_phase.run(queue)
+        mock_save.assert_not_called()
+
+    def test_run_sets_state_flags(self):
+        queue = [{"topic": "Invisalign"}]
+        state = self._base_state()
+        gap_items = self._sample_gap_items()
+        cluster_map = {"pillar_topic": "Invisalign", "spoke_topics": []}
+        with mock.patch("engine.pipeline.phases.cluster_scaling.load_state", return_value=state):
+            with mock.patch("engine.pipeline.phases.cluster_scaling._parse_intelligence", return_value=gap_items):
+                with mock.patch("engine.pipeline.phases.cluster_scaling.load_cluster_map", return_value=cluster_map):
+                    with mock.patch("engine.pipeline.phases.cluster_scaling.save_spoke_backlog"):
+                        with mock.patch("engine.pipeline.phases.cluster_scaling.update_state") as mock_update:
+                            cs_phase.run(queue)
+        updated = {call.args[0]: call.args[1] for call in mock_update.call_args_list}
+        self.assertTrue(updated.get("spoke_backlog_saved"))
+        self.assertTrue(updated.get("cluster_scaled"))
+
+    def test_run_deduplicates_against_cluster_map(self):
+        queue = [{"topic": "Invisalign"}]
+        state = self._base_state()
+        gap_items = [
+            {
+                "gap_topic": "Dup",
+                "justification": "gaps",
+                "suggested_new_sub_topic": "Invisalign vs Traditional Braces: Pros and Cons",
+            },
+            {
+                "gap_topic": "New",
+                "justification": "gaps",
+                "suggested_new_sub_topic": "Brand New Article",
+            },
+        ]
+        cluster_map = {
+            "pillar_topic": "Invisalign",
+            "spoke_topics": [{"sub_topic": "Invisalign vs Traditional Braces: Pros and Cons"}],
+        }
+        captured = []
+        with mock.patch("engine.pipeline.phases.cluster_scaling.load_state", return_value=state):
+            with mock.patch("engine.pipeline.phases.cluster_scaling._parse_intelligence", return_value=gap_items):
+                with mock.patch("engine.pipeline.phases.cluster_scaling.load_cluster_map", return_value=cluster_map):
+                    with mock.patch("engine.pipeline.phases.cluster_scaling.save_spoke_backlog", side_effect=lambda t, b: captured.extend(b)):
+                        with mock.patch("engine.pipeline.phases.cluster_scaling.update_state"):
+                            cs_phase.run(queue)
+        self.assertEqual(1, len(captured))
+        self.assertEqual("Brand New Article", captured[0]["title"])
+
+    def test_run_handles_empty_intelligence_result(self):
+        queue = [{"topic": "Dental Implants"}]
+        state = self._base_state()
+        with mock.patch("engine.pipeline.phases.cluster_scaling.load_state", return_value=state):
+            with mock.patch("engine.pipeline.phases.cluster_scaling._parse_intelligence", return_value=[]):
+                with mock.patch("engine.pipeline.phases.cluster_scaling.load_cluster_map", return_value=None):
+                    with mock.patch("engine.pipeline.phases.cluster_scaling.save_spoke_backlog") as mock_save:
+                        with mock.patch("engine.pipeline.phases.cluster_scaling.update_state"):
+                            cs_phase.run(queue)
+        mock_save.assert_called_once_with("Dental Implants", [])
+
+    def test_parse_intelligence_handles_missing_file(self):
+        result = cs_phase._parse_intelligence("/nonexistent/path/intel.md")
+        self.assertEqual([], result)
+
+    def test_parse_intelligence_handles_invalid_json(self):
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False, encoding="utf-8") as f:
+            f.write("this is not valid json {{{{")
+            tmp_path = f.name
+        try:
+            result = cs_phase._parse_intelligence(tmp_path)
+            self.assertEqual([], result)
+        finally:
+            os.unlink(tmp_path)
+
+    def test_parse_intelligence_parses_valid_json_array(self):
+        payload = json.dumps([
+            {"gap_topic": "Test Gap", "justification": "missing content", "suggested_new_sub_topic": "Test Article"},
+        ])
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False, encoding="utf-8") as f:
+            f.write(payload)
+            tmp_path = f.name
+        try:
+            result = cs_phase._parse_intelligence(tmp_path)
+            self.assertEqual(1, len(result))
+            self.assertEqual("Test Gap", result[0]["gap_topic"])
+        finally:
+            os.unlink(tmp_path)
+
+    def test_parse_intelligence_strips_markdown_fence(self):
+        payload = json.dumps([{"gap_topic": "G", "justification": "j", "suggested_new_sub_topic": "S"}])
+        content = f"```json\n{payload}\n```"
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False, encoding="utf-8") as f:
+            f.write(content)
+            tmp_path = f.name
+        try:
+            result = cs_phase._parse_intelligence(tmp_path)
+            self.assertEqual(1, len(result))
+        finally:
+            os.unlink(tmp_path)
 
 
 if __name__ == "__main__":
