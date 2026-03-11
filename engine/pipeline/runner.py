@@ -8,19 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from engine.pipeline.helpers import load_queue
-from engine.pipeline.phases import (
-    cluster_map_generation,
-    cluster_strategy,
-    serp_analysis,
-    pillar_generation,
-    spoke_generation,
-    seo_optimization,
-    intelligence_gap_detection,
-    cluster_scaling,
-    final_link_injection,
-    humanization_readability,
-    article_quality_assurance,
-)
+from engine.pipeline.phase_registry import build_phases
 
 RUN_SUMMARY_DIR = Path("outputs/run_summaries")
 PHASE_SKIP_RE = re.compile(
@@ -264,19 +252,11 @@ def run_pipeline(topic=None, spoke_limit=2, topic_limit=None, cluster_size=6):
         "phases": [],
     }
 
-    phases = [
-        ("cluster_map_generation", lambda: cluster_map_generation.run(queue, cluster_size)),
-        ("cluster_strategy", lambda: cluster_strategy.run(queue)),
-        ("serp_analysis", lambda: serp_analysis.run(queue)),
-        ("pillar_generation", lambda: pillar_generation.run(queue)),
-        ("spoke_generation", lambda: spoke_generation.run(queue, spoke_limit)),
-        ("seo_optimization", lambda: seo_optimization.run(queue)),
-        ("intelligence_gap_detection", lambda: intelligence_gap_detection.run(queue)),
-        ("cluster_scaling", lambda: cluster_scaling.run(queue)),
-        ("final_link_injection", lambda: final_link_injection.run(queue)),
-        ("humanization_readability", lambda: humanization_readability.run(queue)),
-        ("article_quality_assurance", lambda: article_quality_assurance.run(queue)),
-    ]
+    run_config = {
+        "spoke_limit": spoke_limit,
+        "cluster_size": cluster_size,
+    }
+    phases = build_phases(queue, run_config)
 
     try:
         for phase_name, phase_runner in phases:
