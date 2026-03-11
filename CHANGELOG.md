@@ -13,6 +13,10 @@ and this project uses a release-style version history starting from the current 
 - Test suite contract: All queue scoping assertions reference `phase_registry.apply_scope`.
 - Removed queue filtering from runner and phase modules; only registry handles scoping.
 
+### Added
+- Streamlit dashboard now supports editing topic name/location via UI form (CRUD).
+- Topic queue management is now fully editable from dashboard (add, edit, delete).
+
 ## [0.5.1-beta.1] - 2026-03-11
 
 ### Added

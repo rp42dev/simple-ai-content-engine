@@ -1,0 +1,64 @@
+{
+  "phrase_rewrites": [
+    {
+      "source": "Unlike traditional braces, Invisalign uses clear, removable aligners that fit comfortably over your teeth, offering an effective and virtually invisible treatment option.",
+      "replacement": "Unlike traditional braces, Invisalign uses clear, removable aligners that fit comfortably over your teeth, providing an effective and nearly invisible treatment.",
+      "reason": "Simplified wording while keeping meaning intact."
+    },
+    {
+      "source": "This comprehensive guide will walk you through the Invisalign treatment process, detailing every step from your **initial consultation** to the day you complete treatment.",
+      "replacement": "This guide explains the Invisalign process, covering every step from your **initial consultation** through to finishing treatment.",
+      "reason": "Shortened and simplified sentence for better flow."
+    },
+    {
+      "source": "Your Invisalign journey begins with an **[initial consultation](spoke_invisalign_treatment_process_and_timeline.md)** where your orthodontist will take the time to understand your dental history and discuss your orthodontic goals.",
+      "replacement": "Your Invisalign journey starts with an **[initial consultation](spoke_invisalign_treatment_process_and_timeline.md)**, where the orthodontist reviews your dental history and discusses your goals.",
+      "reason": "Shorter, more direct phrasing."
+    },
+    {
+      "source": "Gone are the days of messy, uncomfortable dental molds.",
+      "replacement": "Messy, uncomfortable dental molds are a thing of the past.",
+      "reason": "More conversational and natural phrasing."
+    },
+    {
+      "source": "Once your scans are complete, your orthodontist uses specialized **ClinCheck software** to design a detailed, step-by-step plan for moving your teeth into their ideal positions.",
+      "replacement": "After your scans, your orthodontist uses **ClinCheck software** to create a step-by-step plan to move your teeth into place.",
+      "reason": "Shortened and simplified sentence."
+    },
+    {
+      "source": "Most Invisalign treatments take between **6 to 18 months**, depending on the complexity of your case.",
+      "replacement": "Most Invisalign treatments last between **6 and 18 months**, depending on case complexity.",
+      "reason": "Slightly clearer phrasing."
+    },
+    {
+      "source": "Wearing the aligners for **20 to 22 hours a day** is critical to effectiveness.",
+      "replacement": "Wearing aligners for **20 to 22 hours a day** is key to effective treatment.",
+      "reason": "Simplified wording and improved flow."
+    },
+    {
+      "source": "During the initial days with a new aligner set, you might experience mild soreness or slight speech changes\u2014both normal and temporary as your mouth adjusts.",
+      "replacement": "In the first days with a new aligner, you may feel mild soreness or slight speech changes; these are normal and temporary as your mouth adjusts.",
+      "reason": "Split long sentence for easier reading."
+    },
+    {
+      "source": "Avoid eating or drinking anything besides plain water while wearing aligners to prevent staining or damage.",
+      "replacement": "Avoid eating or drinking anything but plain water while wearing aligners to prevent stains or damage.",
+      "reason": "Slightly shorter and simpler phrasing."
+    },
+    {
+      "source": "With Invisalign, routine check-up appointments occur approximately every **6 to 8 weeks** or as recommended by your orthodontist.",
+      "replacement": "Routine check-ups with Invisalign usually happen every **6 to 8 weeks** or as your orthodontist advises.",
+      "reason": "More natural and concise phrasing."
+    },
+    {
+      "source": "Retention is an essential phase after Invisalign treatment.",
+      "replacement": "Retention is a key phase after Invisalign treatment.",
+      "reason": "Simpler, more concise wording."
+    },
+    {
+      "source": "Ready to begin your smile journey? [Schedule a consultation](spoke_invisalign_treatment_process_and_timeline.md) today to explore if Invisalign is the right choice for you, and take the first step toward the smile you deserve.",
+      "replacement": "Ready to start your smile journey? [Schedule a consultation](spoke_invisalign_treatment_process_and_timeline.md) today to see if Invisalign is right for you and take the first step toward a confident smile.",
+      "reason": "Simplified call to action and removed clich\u00e9 phrasing."
+    }
+  ]
+}

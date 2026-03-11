@@ -170,10 +170,11 @@ def run_engine(cmd_args, session_ph, table_ph=None):
             st.session_state.is_running = False
 
 def render_status(ph, running=False):
+    import html
     phase   = st.session_state.get("phase", "IDLE")
     topic   = st.session_state.get("active_topic", "—")
-    article = st.session_state.get("article", "")
-    agent   = st.session_state.get("agent_stage", "")
+    article = html.escape(st.session_state.get("article", ""))
+    agent   = html.escape(st.session_state.get("agent_stage", ""))
     thinking_html = "<div class='thinking'>PROCESSING</div>" if running else ""
 
     with ph.container():
@@ -436,7 +437,7 @@ else:
         m_pipeline = load_topic_pipeline_status(m_target)
 
         # Action buttons
-        ac1, ac2, ac3 = st.columns(3)
+        ac1, ac2, ac3, ac4 = st.columns(4)
         with ac1:
             if st.button("RESET STATE", use_container_width=True):
                 save_topic_state(m_target, {"topic": m_target}); st.rerun()
@@ -446,6 +447,50 @@ else:
         with ac3:
             if st.button("PUBLISH TO CMS", use_container_width=True):
                 st.info("CMS PUBLISHING — NOT CONFIGURED")
+        with ac4:
+            edit_mode = st.button("EDIT TOPIC", use_container_width=True, key=f"edit_{m_target}")
+
+        # Edit form
+        if 'edit_topic_active' not in st.session_state:
+            st.session_state['edit_topic_active'] = None
+        if edit_mode:
+            st.session_state['edit_topic_active'] = m_target
+        if st.session_state['edit_topic_active'] == m_target:
+            st.markdown("<br>", unsafe_allow_html=True)
+            st.subheader("Edit Topic")
+            # Find topic in queue
+            topic_item = next((i for i in queue if i["topic"] == m_target), None)
+            if topic_item:
+                with st.form(key=f"edit_form_{m_target}"):
+                    new_topic = st.text_input("TOPIC", value=topic_item.get("topic", ""))
+                    new_url = st.text_input("URL", value=topic_item.get("competitor_url", ""))
+                    new_prio = st.selectbox("PRIORITY", ["high","medium","low"], index=["high","medium","low"].index(topic_item.get("priority","medium")))
+                    loc = topic_item.get("location", {})
+                    new_city = st.text_input("CITY", value=loc.get("city", ""))
+                    new_area = st.text_input("AREA", value=loc.get("area", ""))
+                    new_country = st.text_input("COUNTRY", value=loc.get("country", ""))
+                    bus = topic_item.get("business", {})
+                    new_business_name = st.text_input("BUSINESS NAME", value=bus.get("name", ""))
+                    new_business_phone = st.text_input("BUSINESS PHONE", value=bus.get("phone", ""))
+                    submit = st.form_submit_button("SAVE CHANGES")
+                    cancel = st.form_submit_button("CANCEL")
+                    if submit:
+                        # Update topic in queue
+                        for i in queue:
+                            if i["topic"] == m_target:
+                                i["topic"] = new_topic
+                                i["competitor_url"] = new_url
+                                i["priority"] = new_prio
+                                i["location"] = {"city": new_city, "area": new_area, "country": new_country}
+                                i["business"] = {"name": new_business_name, "phone": new_business_phone}
+                        save_queue(queue)
+                        st.session_state['edit_topic_active'] = None
+                        st.success("Topic updated.")
+                        time.sleep(0.8); st.rerun()
+                    elif cancel:
+                        st.session_state['edit_topic_active'] = None
+                        st.info("Edit cancelled.")
+                        time.sleep(0.5); st.rerun()
 
         with st.expander("PIPELINE STATUS", expanded=False):
             st.json(m_pipeline)
@@ -460,10 +505,8 @@ else:
         safe = get_safe_name(m_target)
         if os.path.exists("outputs"):
             all_md = [f for f in os.listdir("outputs") if is_canonical_output_markdown(f)]
-            
             # Always include files with the parent topic slug
             matched = [f for f in all_md if safe in f.lower()]
-            
             # Also pull in spoke files via the cluster blueprint
             m_bp_data, _ = parse_blueprint(m_target)
             if m_bp_data:
@@ -474,7 +517,6 @@ else:
                         for f in all_md:
                             if f.startswith("spoke_") and s_safe in f and f not in matched:
                                 matched.append(f)
-            
             files = sorted(matched)
             if files:
                 f_sel = st.selectbox("ARTIFACT", files, label_visibility="collapsed")

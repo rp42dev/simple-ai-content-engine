@@ -1,0 +1,26 @@
+{
+  "topic": "Invisalign",
+  "pillar": "The Ultimate Guide to Invisalign: How It Works, Benefits, and What to Expect",
+  "spokes": [
+    {
+      "title": "Step-by-Step Invisalign Procedure: What Happens From Consultation to Retainers",
+      "intent": "informational"
+    },
+    {
+      "title": "Invisalign vs. Traditional Braces: Which Teeth Straightening Option Is Right for You?",
+      "intent": "comparison"
+    },
+    {
+      "title": "How Much Does Invisalign Cost? Understanding Pricing and Insurance Coverage",
+      "intent": "commercial"
+    },
+    {
+      "title": "Are There Risks or Side Effects with Invisalign? What You Need to Know Before Starting",
+      "intent": "informational"
+    },
+    {
+      "title": "Can Invisalign Be Combined with Other Dental Treatments for Best Results?",
+      "intent": "supporting"
+    }
+  ]
+}

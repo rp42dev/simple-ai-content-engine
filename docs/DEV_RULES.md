@@ -10,6 +10,13 @@ Queue filtering (topic, topic_limit, priority) is now enforced centrally in `eng
 
 ---
 
+## Dashboard CRUD Topic Management (2026-03-11)
+- Streamlit dashboard now supports add, edit, and delete for topics and locations.
+- All business logic remains in engine/services; UI is thin and compliant.
+- Incremental testing protocol applies: test add/edit/delete flows before broader runs.
+
+---
+
 ---
 
 ## 1) Git Workflow (Required)

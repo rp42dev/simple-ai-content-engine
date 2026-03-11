@@ -1,0 +1,33 @@
+{
+  "topic": "Invisalign",
+  "publish_ready": false,
+  "articles": [
+    {
+      "article_name": "article",
+      "output_file": "invisalign_pillar_final.md",
+      "publish_ready": false,
+      "score": 69,
+      "blocker_count": 2,
+      "warning_count": 5,
+      "summary": "The article provides comprehensive, well-structured content about Invisalign, but lacks clear business/location metadata and contains weak or generic CTAs. Some internal links reference spoke articles that may overlap slightly with pillar content. No placeholders were found, which is positive. The tone is generally natural, but certain phrases are slightly promotional or generic. Improvements in CTA specificity and inclusion of business/location details are needed before publishing."
+    },
+    {
+      "article_name": "spoke_invisalign_treatment_process_and_timeline",
+      "output_file": "spoke_invisalign_treatment_process_and_timeline_final.md",
+      "publish_ready": false,
+      "score": 69,
+      "blocker_count": 1,
+      "warning_count": 3,
+      "summary": "Well-structured, informative article with clear explanation of Invisalign treatment process and timeline. Metadata is present and relevant. Minor issues noted with broken internal links and somewhat generic CTA language."
+    },
+    {
+      "article_name": "spoke_invisalign_vs_traditional_braces_pros_and_cons",
+      "output_file": "spoke_invisalign_vs_traditional_braces_pros_and_cons_final.md",
+      "publish_ready": false,
+      "score": 69,
+      "blocker_count": 1,
+      "warning_count": 2,
+      "summary": "The article on Invisalign vs traditional braces is well-structured, informative, and covers pros, cons, costs, and treatment timelines comprehensively. The meta description is present and relevant. The tone is professional and clear without overly promotional language. Some minor issues with internal linking to spoke articles which appear as placeholders but are consistent throughout and could be improved. No placeholder business or location text detected. CTA language is natural and appropriate. No major blockers present for publishing."
+    }
+  ]
+}

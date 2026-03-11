@@ -126,6 +126,11 @@ Current execution in `engine/pipeline/runner.py` is phase-based and queue-driven
 - It starts pipeline runs, shows status/progress, manages queue entries, and previews artifacts.
 - It should stay thin and call engine interfaces instead of owning business rules.
 
+### Dashboard CRUD Topic Management
+- The dashboard now supports full CRUD for topic queue (add, edit, delete).
+- Edit form allows updating topic name and location in topics_queue.json.
+- All business logic remains in engine/services; UI is thin and compliant.
+
 ---
 
 ## Canonical Pipeline (Must Preserve)

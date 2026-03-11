@@ -1,0 +1,26 @@
+{
+  "topic": "Professional Teeth Whitening",
+  "pillar": "The Complete Guide to Professional Teeth Whitening: Techniques, Benefits, and What to Expect",
+  "spokes": [
+    {
+      "title": "What Are the Different Professional Teeth Whitening Procedures Available?",
+      "intent": "informational"
+    },
+    {
+      "title": "Professional Teeth Whitening vs. Over-the-Counter Products: Which is More Effective?",
+      "intent": "comparison"
+    },
+    {
+      "title": "How Much Does Professional Teeth Whitening Cost in Celbridge, Kildare? Pricing Guide and Packages at From To",
+      "intent": "commercial"
+    },
+    {
+      "title": "Are There Any Risks or Side Effects of Professional Teeth Whitening You Should Know?",
+      "intent": "informational"
+    },
+    {
+      "title": "Top Supporting Dental Treatments to Enhance and Maintain Your Teeth Whitening Results",
+      "intent": "supporting"
+    }
+  ]
+}

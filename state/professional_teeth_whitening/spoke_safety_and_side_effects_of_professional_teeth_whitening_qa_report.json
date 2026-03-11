@@ -1,0 +1,69 @@
+{
+  "publish_ready": false,
+  "score": 69,
+  "compliance_level": "strict",
+  "publish_threshold": 85,
+  "summary": "The article has strong content and good local relevance; however, there are multiple placeholder issues with the business name 'from to' and inconsistent formatting that reduce professionalism. Some CTA language can be improved for clarity and natural flow. Minor metadata improvements and removal of bracketed placeholder-style links are also recommended.",
+  "blockers": [
+    {
+      "issue": "Placeholder business name 'from to' remains",
+      "evidence": "Business repeated as '*from to*', which appears to be placeholder text and not a real clinic name.",
+      "suggestion": "Replace 'from to' with the actual business name to avoid unprofessional placeholder leakage."
+    },
+    {
+      "issue": "Placeholder and broken bracketed inline links",
+      "evidence": "The article contains bracketed references like '[professional teeth whitening](/safety-and-side-effects-of-professional-teeth-whitening)' which appear as internal links possibly from a content management system but have no clickable URLs or contextual value here.",
+      "suggestion": "Remove or replace bracketed links with proper URLs or plain text for clarity."
+    }
+  ],
+  "warnings": [
+    {
+      "issue": "AI-sounding or unnatural phrasing",
+      "evidence": "Phrases such as 'whitening agents can temporarily increase sensitivity by opening tiny channels in the enamel' sound slightly technical and complex, while some CTAs such as 'Book your consultation today!' feel generic.",
+      "suggestion": "Consider slightly more natural phrasing and friendly CTAs for better reader engagement."
+    },
+    {
+      "issue": "CTA language could be more direct and consistent",
+      "evidence": "The local CTA says 'Call *from to* at 0894243660 for a consultation and start your journey...' which is somewhat generic.",
+      "suggestion": "Refine CTAs to directly invite action, e.g., 'Call [Business Name] today at 0894243660 to schedule your teeth whitening consultation in Celbridge.'"
+    },
+    {
+      "issue": "Meta description lacks stronger keyword variation and CTA",
+      "evidence": "Meta description uses 'Discover safe, expert teeth whitening at from to in Celbridge, Kildare. Learn about side effects & benefits. Book your consultation today!' which repeats 'safe' and 'expert' closely and uses generic phrases.",
+      "suggestion": "Enhance Meta Description with more compelling messaging and keyword diversity."
+    }
+  ],
+  "strengths": [
+    "Metadata is present in the final article.",
+    "Article lock marker is present.",
+    "Comprehensive coverage of safety, side effects, and benefits of professional teeth whitening.",
+    "Clear local relevance with mention of Celbridge, Kildare, and Ireland.",
+    "Good structure with logical subheadings and FAQs to aid reader understanding.",
+    "Includes realistic cost estimates typical for the local area.",
+    "Balanced and factual tone without hype or exaggerated claims."
+  ],
+  "suggested_edits": [
+    {
+      "severity": "high",
+      "issue": "Placeholder business name and references",
+      "suggestion": "Replace all instances of 'from to' with the client's actual clinic name. Remove placeholder-like bracketed internal links or replace with actual URLs."
+    },
+    {
+      "severity": "medium",
+      "issue": "Improve CTA clarity and naturalness",
+      "suggestion": "Rewrite CTAs to be more direct and inviting, for example: 'Call [Clinic Name] at 0894243660 to book your professional teeth whitening consultation in Celbridge today.'"
+    },
+    {
+      "severity": "low",
+      "issue": "Meta Description refinement",
+      "suggestion": "Rewrite meta description for better engagement and keyword variation while preserving key elements, e.g., 'Achieve a brighter smile with expert teeth whitening from [Clinic Name] in Celbridge, Kildare. Safe, effective treatments\u2014book your consultation now!'"
+    },
+    {
+      "severity": "low",
+      "issue": "Remove bracketed placeholder links",
+      "suggestion": "Replace bracketed links (e.g., [professional teeth whitening](/professional-teeth-whitening)) with plain text or actual URLs suitable for publication."
+    }
+  ],
+  "article_name": "spoke_safety_and_side_effects_of_professional_teeth_whitening",
+  "output_file": "spoke_safety_and_side_effects_of_professional_teeth_whitening_final.md"
+}

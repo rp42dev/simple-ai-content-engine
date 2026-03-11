@@ -1,0 +1,59 @@
+{
+  "phrase_rewrites": [
+    {
+      "source": "In recent years, Invisalign has surged in popularity as a sleek, modern alternative to traditional braces.",
+      "replacement": "Invisalign has grown popular as a modern, discreet alternative to traditional braces.",
+      "reason": "Shortened sentence and removed marketing phrasing for more natural tone."
+    },
+    {
+      "source": "So, what exactly is Invisalign?",
+      "replacement": "What exactly is Invisalign?",
+      "reason": "Removed conversational filler for smoother flow."
+    },
+    {
+      "source": "This guide is crafted for prospective Invisalign patients, parents exploring options for their children, or anyone curious about clear aligner therapy.",
+      "replacement": "This guide is for anyone considering Invisalign, including patients and parents exploring options for their children.",
+      "reason": "Simplified wording for readability."
+    },
+    {
+      "source": "SmartTrack\u2019s elasticity and durability provide consistent force, improving comfort and reducing the number of follow-up visits compared to earlier aligner versions.",
+      "replacement": "SmartTrack\u2019s elasticity provides consistent force, improving comfort and reducing follow-up visits compared to earlier aligners.",
+      "reason": "Shortened and clarified sentence."
+    },
+    {
+      "source": "Gone are the days when metal brackets and wires were the only option for straightening teeth.",
+      "replacement": "Metal brackets and wires used to be the only option for straightening teeth.",
+      "reason": "Avoided clich\u00e9 phrase and simplified."
+    },
+    {
+      "source": "One of Invisalign\u2019s biggest selling points is its almost invisible look.",
+      "replacement": "One of Invisalign\u2019s main benefits is its nearly invisible appearance.",
+      "reason": "Removed marketing phrase 'selling points' for more neutral phrasing."
+    },
+    {
+      "source": "You\u2019ll switch to the next aligner in your series every 1-2 weeks, steadily advancing towards your ideal smile.",
+      "replacement": "You switch to the next aligner every 1-2 weeks, steadily moving toward your ideal smile.",
+      "reason": "Simplified sentence and improved flow."
+    },
+    {
+      "source": "Violent words like \"hassle\" or \"Ultimate Guide\" can sound overly promotional.",
+      "replacement": "Removed overly promotional words like \"hassle\" or \"Ultimate Guide.\"",
+      "reason": "Avoids marketing tone and exaggeration."
+    },
+    {
+      "source": "For those comparing options, see the detailed [Invisalign vs Traditional Braces: Pros and Cons](spoke_invisalign_vs_traditional_braces_pros_and_cons.md) to explore effectiveness, comfort, visibility, and other important factors.",
+      "replacement": "See [Invisalign vs Traditional Braces: Pros and Cons](spoke_invisalign_vs_traditional_braces_pros_and_cons.md) to compare effectiveness, comfort, visibility, and more.",
+      "reason": "Shortened sentence for clarity."
+    },
+    {
+      "source": "Discomfort generally arises during the first few days of switching to a new aligner as your teeth begin shifting.",
+      "replacement": "Discomfort usually occurs during the first few days after switching to a new aligner as your teeth start to shift.",
+      "reason": "Clarified timeline for better readability."
+    },
+    {
+      "source": "Upon finishing your Invisalign series, your orthodontist will assess your final results.",
+      "replacement": "After finishing your Invisalign series, your orthodontist will assess your results.",
+      "reason": "Simplified sentence."
+    }
+  ]
+}

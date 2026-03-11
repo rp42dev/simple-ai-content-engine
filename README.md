@@ -1,15 +1,18 @@
 # AI Content Engine
-
 AI Content Engine is a CrewAI-based pipeline for generating SEO content clusters using multiple agents and phased execution.
 
 ## Current Pipeline Phases
-1. Cluster Strategy
-2. Pillar Article Generation
-3. Spoke Article Generation
-4. SEO Optimization
-5. Intelligence (Content Gap Detection)
-6. Cluster Scaling
-7. Final Link Injection
+1. Cluster Map Generation
+2. Cluster Strategy
+3. SERP Analysis
+4. Pillar Article Generation
+5. Spoke Article Generation
+6. SEO Optimization
+7. Intelligence Gap Detection
+8. Cluster Scaling
+9. Final Link Injection
+10. Humanization & Readability
+11. Article Quality Assurance
 
 ## Quick Start
 1. Create and activate your Python environment.
@@ -38,6 +41,12 @@ AI Content Engine is a CrewAI-based pipeline for generating SEO content clusters
   - `python main.py --run-list 20`
   - Failed runs only: `python main.py --run-list 20 --failed-only`
   - JSON list: `python main.py --run-list 20 --json`
+
+## Dashboard Q&A and Status Display
+- The dashboard now supports add, edit, and delete for topics and locations.
+- Status card displays current phase, topic, article, agent stage, and processing state.
+- Q&A summary for each topic is shown in the Topic Management section.
+- All status values are safely escaped to prevent UI glitches.
 
 Run traceability:
 - Each run gets a generated `run_id` printed in console.
@@ -71,6 +80,7 @@ Behavior:
 ## Dashboard (Temporary Ops UI)
 - Run Streamlit monitor/control UI:
   - `streamlit run dashboard.py`
+- You can now add, edit, and delete topics directly from the dashboard. Edit form allows updating topic name/location.
 
 ## Project Structure (Current)
 - `engine/` modular pipeline runner + phase modules

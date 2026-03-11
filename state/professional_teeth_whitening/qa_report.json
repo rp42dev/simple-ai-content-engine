@@ -1,0 +1,33 @@
+{
+  "topic": "Professional Teeth Whitening",
+  "publish_ready": false,
+  "articles": [
+    {
+      "article_name": "article",
+      "output_file": "professional_teeth_whitening_pillar_final.md",
+      "publish_ready": false,
+      "score": 69,
+      "blocker_count": 1,
+      "warning_count": 2,
+      "summary": "The article is comprehensive and well-structured with strong metadata and clear information about professional teeth whitening in Celbridge. However, the placeholder business name 'from to' is present throughout the article, which is a critical blocker requiring correction before publishing. There are also minor tone issues with slightly repetitive CTA phrasing and some awkward clinic naming consistency."
+    },
+    {
+      "article_name": "spoke_safety_and_side_effects_of_professional_teeth_whitening",
+      "output_file": "spoke_safety_and_side_effects_of_professional_teeth_whitening_final.md",
+      "publish_ready": false,
+      "score": 69,
+      "blocker_count": 2,
+      "warning_count": 3,
+      "summary": "The article has strong content and good local relevance; however, there are multiple placeholder issues with the business name 'from to' and inconsistent formatting that reduce professionalism. Some CTA language can be improved for clarity and natural flow. Minor metadata improvements and removal of bracketed placeholder-style links are also recommended."
+    },
+    {
+      "article_name": "spoke_types_of_professional_teeth_whitening_treatments",
+      "output_file": "spoke_types_of_professional_teeth_whitening_treatments_final.md",
+      "publish_ready": false,
+      "score": 69,
+      "blocker_count": 1,
+      "warning_count": 3,
+      "summary": "The article is generally well-structured and informative with specific local and business details correctly inserted. However, the business name 'From To' appears to be a placeholder and sounds artificial, detracting from trustworthiness. The CTA text inconsistently refers to the business as 'From To' without clear branding, which may confuse readers. Minor phrasing and tone issues occur where clinic-promotional language could be more natural and less AI/generic sounding. Overall metadata is present but could benefit from keyword enrichment. These issues suggest the article needs moderate edits before publishing."
+    }
+  ]
+}

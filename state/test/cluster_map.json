@@ -1,0 +1,34 @@
+{
+  "topic": "Test",
+  "pillar": "The Ultimate Guide to Tests: Understanding Types, Purposes, and Importance",
+  "spokes": [
+    {
+      "title": "How Are Different Types of Tests Conducted? Step-by-Step Procedures Explained",
+      "intent": "informational"
+    },
+    {
+      "title": "Cost Breakdown: How Much Do Various Tests Usually Cost and What Affects the Price?",
+      "intent": "commercial"
+    },
+    {
+      "title": "Blood Test vs. Urine Test: Which Is More Reliable for Diagnosing Conditions?",
+      "intent": "comparison"
+    },
+    {
+      "title": "What Are the Risks and Side Effects of Common Medical Tests?",
+      "intent": "informational"
+    },
+    {
+      "title": "Additional Supporting Treatments You Might Need After Diagnostic Testing",
+      "intent": "supporting"
+    },
+    {
+      "title": "Top 10 Frequently Asked Questions About Medical and Educational Tests",
+      "intent": "informational"
+    },
+    {
+      "title": "Where to Get Affordable and Reliable Tests Near Me: Finding Local Testing Centers",
+      "intent": "commercial"
+    }
+  ]
+}

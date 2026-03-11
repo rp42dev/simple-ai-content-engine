@@ -1,0 +1,84 @@
+{
+  "phrase_rewrites": [
+    {
+      "source": "Many people in Celbridge and the wider Kildare area want a brighter smile to boost their confidence.",
+      "replacement": "Many people in Celbridge and Kildare want a brighter smile to boost their confidence.",
+      "reason": "Simplify phrase for easier readability by removing 'wider area' which is redundant given 'Kildare'."
+    },
+    {
+      "source": "However, before deciding on treatment, it\u2019s important to understand not only how whitening works but also the safety aspects and possible side effects.",
+      "replacement": "Before deciding on treatment, it\u2019s important to understand how whitening works along with its safety and possible side effects.",
+      "reason": "Shorter, smoother phrasing to improve flow."
+    },
+    {
+      "source": "dentists carefully control the concentration of these agents and tailor the treatment to your specific needs.",
+      "replacement": "dentists control the concentration of these agents and tailor the treatment to your needs.",
+      "reason": "Simplify without losing meaning; 'carefully' can be implied."
+    },
+    {
+      "source": "In Celbridge, dental clinics like *from to* typically offer two main types of professional whitening:",
+      "replacement": "In Celbridge, clinics like *from to* usually offer two main types of professional whitening:",
+      "reason": "Shorter, more conversational phrasing."
+    },
+    {
+      "source": "Pricing for these treatments in Ireland usually ranges from about \u20ac250 to \u20ac600 for in-clinic procedures, and \u20ac150 to \u20ac300 for take-home kits.",
+      "replacement": "In Ireland, prices usually range from \u20ac250 to \u20ac600 for in-clinic treatments, and \u20ac150 to \u20ac300 for take-home kits.",
+      "reason": "Simplify sentence structure and remove unnecessary words."
+    },
+    {
+      "source": "While professional teeth whitening is safe when supervised by a dentist, some patients can experience side effects.",
+      "replacement": "Professional whitening is safe when supervised by a dentist, but some patients may experience side effects.",
+      "reason": "More concise and natural phrasing."
+    },
+    {
+      "source": "The good news is that treatment by experienced dental professionals like at *from to* involves close supervision and precautions that greatly reduce these risks.",
+      "replacement": "At *from to*, experienced dental professionals provide close supervision and take precautions to reduce these risks.",
+      "reason": "Active voice and simpler structure improve clarity."
+    },
+    {
+      "source": "Before any whitening treatment, your dentist will perform a thorough dental examination.",
+      "replacement": "Before whitening, your dentist will perform a thorough dental exam.",
+      "reason": "Shorter phrasing improves readability."
+    },
+    {
+      "source": "Also, disclosing your medical or dental history\u2014such as pregnancy, allergies, or previous sensitivity\u2014is important for tailoring safe treatment.",
+      "replacement": "Sharing your medical or dental history\u2014like pregnancy, allergies, or sensitivity\u2014helps tailor safe treatment.",
+      "reason": "Simplified wording for better flow."
+    },
+    {
+      "source": "Professional whitening is not suitable for everyone. If you fall into one of these categories, consult your dentist before proceeding:",
+      "replacement": "Professional whitening isn\u2019t suitable for everyone. If you fit any of these categories, consult your dentist first:",
+      "reason": "More conversational and easier to read."
+    },
+    {
+      "source": "Most side effects are temporary and mild:",
+      "replacement": "Side effects are usually mild and temporary:",
+      "reason": "More natural phrasing."
+    },
+    {
+      "source": "Thinking about treatment? Book a consultation with from to in kildare, Celbridge, Ireland.",
+      "replacement": "Considering treatment? Book a consultation with from to in Celbridge, Kildare.",
+      "reason": "Shorter, removes redundant commas, and capitalizes place names consistently."
+    },
+    {
+      "source": "The cost depends on how many sessions you require, the intensity of whitening you want, and the treatment method selected.",
+      "replacement": "Costs depend on the number of sessions, desired whitening level, and treatment type.",
+      "reason": "Simplify sentence for better readability."
+    },
+    {
+      "source": "While cheaper options exist, professional whitening provides real value by reducing risks and producing more consistent results.",
+      "replacement": "Cheaper options exist, but professional whitening reduces risks and gives more consistent results.",
+      "reason": "Simpler, more direct phrasing."
+    },
+    {
+      "source": "Professional teeth whitening is a reliable and safe way to improve your smile when done under expert care tailored to your needs.",
+      "replacement": "Professional teeth whitening safely improves your smile when done with expert care tailored to you.",
+      "reason": "Shorter and more direct for better flow."
+    },
+    {
+      "source": "Ready to explore professional teeth whitening safely in Celbridge? Call *from to* dental clinic now at 0894243660 for a personalised consultation and let us help you achieve a confident, brighter smile with expert care and attention.",
+      "replacement": "Ready for professional teeth whitening in Celbridge? Call *from to* at 0894243660 for a consultation and start your journey to a brighter smile.",
+      "reason": "More concise and natural call to action."
+    }
+  ]
+}

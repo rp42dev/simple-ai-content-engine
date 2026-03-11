@@ -1,0 +1,85 @@
+{
+  "topic": "Invisalign",
+  "pillar": {
+    "query": "Invisalign",
+    "top_headings": [
+      "What is Invisalign?",
+      "How Does Invisalign Work?",
+      "Benefits of Invisalign",
+      "Invisalign Treatment Process",
+      "Who is a Candidate for Invisalign?",
+      "Cost of Invisalign",
+      "Invisalign vs. Traditional Braces",
+      "Care and Maintenance of Invisalign Aligners",
+      "What to Expect During Treatment",
+      "Potential Risks and Considerations"
+    ],
+    "questions": [
+      "How much does Invisalign cost?",
+      "Is Invisalign effective for all types of dental issues?",
+      "How long does Invisalign treatment take?",
+      "Does Invisalign hurt?",
+      "Can I eat and drink with Invisalign?",
+      "How often do I need to wear Invisalign?",
+      "Will Invisalign affect my speech?",
+      "Is Invisalign covered by insurance?"
+    ],
+    "recommended_word_range": "1500-1800",
+    "notes": [
+      "Since 'Invisalign' is a broad, pillar topic, content should be comprehensive covering what Invisalign is, how it works, treatment process, costs, comparisons with braces, care instructions, candidacy, benefits, risks, and common user questions.",
+      "Recommended word count range is 1500-1800 words to adequately cover the breadth and depth expected for a main guide on Invisalign.",
+      "Common headings focus on educational and decision-support aspects, indicating users seek both basic understanding and treatment logistics.",
+      "User questions are focused on cost, effectiveness, treatment duration, usage, and care, pointing to key concerns and practical information needs.",
+      "A well-structured article should include clear sections addressing these headings and questions to align with user intent and SEO patterns."
+    ]
+  },
+  "spokes": {
+    "Invisalign Treatment Process and Timeline": {
+      "query": "Invisalign Treatment Process and Timeline",
+      "top_headings": [],
+      "questions": [],
+      "recommended_word_range": "900-1200",
+      "notes": [
+        "No direct SERP data available for the query; therefore, no recurring headings or common user questions could be extracted.",
+        "Based on typical informational queries on treatment processes and timelines, typical helpful headings might include: Introduction to Invisalign, Initial Consultation and Assessment, Custom Treatment Planning, Aligners Fabrication and Delivery, Wearing Aligners and Adjustments, Monitoring Progress and Follow-ups, Typical Timeline Expectations, Post-Treatment Care and Retainers.",
+        "Common user questions often relate to: How long does Invisalign treatment take?, What is the step-by-step Invisalign process?, How often will I need to visit my dentist?, What are the stages in wearing Invisalign aligners?, Can Invisalign fix specific dental issues within a set timeline?, What factors affect the treatment duration?, What happens after completing Invisalign treatment?",
+        "Recommended word range is 900-1200 words since the topic is a process-oriented, spoke-style subtopic targeting practical treatment and timeline guidance rather than a broad pillar overview.",
+        "Suggested approach is to include clear, sequential headings and address common procedural questions to ensure comprehensive coverage."
+      ]
+    },
+    "Invisalign vs Traditional Braces: Pros and Cons": {
+      "query": "Invisalign vs Traditional Braces: Pros and Cons",
+      "top_headings": [
+        "Introduction to Invisalign and Traditional Braces",
+        "How Invisalign Works",
+        "How Traditional Braces Work",
+        "Pros of Invisalign",
+        "Cons of Invisalign",
+        "Pros of Traditional Braces",
+        "Cons of Traditional Braces",
+        "Comparison of Treatment Duration",
+        "Effectiveness and Types of Dental Issues Treated",
+        "Cost Comparison"
+      ],
+      "questions": [
+        "What are the main differences between Invisalign and traditional braces?",
+        "Which is more effective for different orthodontic issues?",
+        "How long does treatment usually last with Invisalign vs braces?",
+        "How much do Invisalign and traditional braces cost?",
+        "Are Invisalign aligners more comfortable than braces?",
+        "Can I eat the same foods with Invisalign as with braces?",
+        "How do I maintain oral hygiene with Invisalign compared to braces?",
+        "Who should choose Invisalign and who should opt for traditional braces?"
+      ],
+      "recommended_word_range": "1500-1800",
+      "notes": [
+        "The topic is broad and comparative; content should cover both options comprehensively with clear pros and cons.",
+        "Include detailed sections explaining the workings of both Invisalign and braces to educate readers.",
+        "Address common user concerns centering on effectiveness, cost, comfort, and lifestyle impact.",
+        "Incorporate a dedicated candidate suitability subtopic to help readers self-assess appropriateness.",
+        "Content depth should be enough for users to make informed decisions, thus a longer article in the 1500-1800 word range is advised.",
+        "Use user questions as subheadings or FAQ to address specific informational needs and enhance SEO."
+      ]
+    }
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "phrase_rewrites": [
+    {
+      "source": "If you\u2019ve been thinking about brightening your smile here in Celbridge or anywhere around Kildare, you\u2019re not alone. Many patients ask us about teeth whitening \u2014 wondering how effective it really is, whether it\u2019s safe, how much it might cost, and what fits best with their lifestyle.",
+      "replacement": "If you\u2019re considering brightening your smile in Celbridge or Kildare, you\u2019re not alone. Many patients ask about teeth whitening \u2014 how effective and safe it is, the cost, and what suits their lifestyle best.",
+      "reason": "Shortened sentences and removed informal phrasing for clearer, more natural flow."
+    },
+    {
+      "source": "Dentist-supervised treatments offer stronger, safer options with more consistent and noticeable results.",
+      "replacement": "Dentist-supervised treatments use stronger, safer methods that deliver more consistent and noticeable results.",
+      "reason": "Simplified phrasing for clarity and natural tone."
+    },
+    {
+      "source": "In this guide, I\u2019ll walk you through the main types of professional teeth whitening treatments available locally in Celbridge. You\u2019ll learn what to expect, the benefits and costs, and how to decide what\u2019s right for your smile.",
+      "replacement": "This guide covers the main types of professional teeth whitening treatments available in Celbridge, explaining what to expect, benefits, costs, and how to choose the right option.",
+      "reason": "Removed first-person phrasing and shortened sentences to improve professionalism and readability."
+    },
+    {
+      "source": "Unlike store-bought gels or strips, professional whitening is customised: the bleaching gel strength, application method, and treatment length are adjusted based on your needs.",
+      "replacement": "Unlike store-bought gels or strips, professional whitening is customised. The gel strength, application method, and treatment time are tailored to your needs.",
+      "reason": "Split long sentence into two for better readability."
+    },
+    {
+      "source": "The whitening works by penetrating the enamel to break down stains caused by foods, drinks, smoking, and aging, giving you a fresher, brighter smile.",
+      "replacement": "The whitening penetrates the enamel to break down stains from food, drinks, smoking, and ageing, resulting in a brighter smile.",
+      "reason": "Simplified wording and shortened sentence."
+    },
+    {
+      "source": "Done in the clinic by the dentist, these offer fast, dramatic results in a single or couple of sessions.",
+      "replacement": "Performed in the clinic by a dentist, these provide fast, dramatic results in one or two sessions.",
+      "reason": "Clarified and simplified phrasing."
+    },
+    {
+      "source": "Many clinics, including ours at From To, may use a special light or laser to activate the gel, speeding up the whitening process. The session usually lasts one to two hours.",
+      "replacement": "Many clinics, including From To, use a special light or laser to activate the gel and speed up whitening. Sessions usually last one to two hours.",
+      "reason": "Shortened sentences removing redundant phrasing for better flow."
+    },
+    {
+      "source": "Typically, one to two sessions are enough to reach your desired shade, especially for deeper, stubborn stains.",
+      "replacement": "Usually, one or two sessions are enough to reach your desired shade, especially for stubborn stains.",
+      "reason": "Simplified phrasing and shortened sentence."
+    },
+    {
+      "source": "Keep in mind that in-office treatments generally cost more\u2014typically between \u20ac300 and \u20ac500 per session\u2014but you get the advantage of clinical expertise and immediate results.",
+      "replacement": "In-office treatments generally cost more\u2014typically \u20ac300 to \u20ac500 per session\u2014but offer clinical expertise and immediate results.",
+      "reason": "Removed filler phrasing for conciseness."
+    },
+    {
+      "source": "You\u2019ll apply a milder bleaching gel inside the trays and wear them as instructed, usually for about an hour a day over one to two weeks. Follow-up appointments help us monitor your progress and adjust if necessary.",
+      "replacement": "You apply a milder bleaching gel into the trays and wear them as instructed, usually about an hour a day for one to two weeks. Follow-ups monitor progress and adjust treatment if needed.",
+      "reason": "Simplified sentence structure for easier reading."
+    },
+    {
+      "source": "Take-home whitening works well for mild to moderate staining or for patients who want a subtler, gradual whitening effect. It\u2019s a great choice if you have sensitive teeth or prefer to space out the treatment.",
+      "replacement": "Take-home whitening suits mild to moderate stains or those wanting a gentler, gradual effect. It\u2019s a good choice for sensitive teeth or if you prefer spacing out treatment.",
+      "reason": "Shortened sentences and simplified wording for clarity."
+    },
+    {
+      "source": "Choosing professional teeth whitening in Celbridge means:",
+      "replacement": "Professional teeth whitening in Celbridge offers:",
+      "reason": "Simplified and more direct phrasing."
+    },
+    {
+      "source": "Thinking about treatment? Book a consultation with from to in kildare, Celbridge, Ireland. \ud83d\udccd kildare, Celbridge, Ireland \ud83d\udcde [0894243660](tel:0894243660)",
+      "replacement": "Considering treatment? Book a consultation with From To in Celbridge, Kildare. \ud83d\udccd Celbridge, Kildare \ud83d\udcde [0894243660](tel:0894243660)",
+      "reason": "Corrected business name capitalization and location reference, simplified sentence."
+    },
+    {
+      "source": "While cheaper over-the-counter options may seem appealing, professional whitening is usually worth the investment, avoiding potential damage or uneven results.",
+      "replacement": "While cheaper over-the-counter options may seem tempting, professional whitening is often worth the investment to avoid damage or uneven results.",
+      "reason": "Simplified phrasing for more natural tone."
+    },
+    {
+      "source": "Dentists will assess your suitability and take precautions to protect your teeth and gums.",
+      "replacement": "Dentists assess your suitability and take steps to protect your teeth and gums.",
+      "reason": "Shortened for brevity and smoother flow."
+    },
+    {
+      "source": "Results can last from six months to two years, depending on your oral care routine and lifestyle habits like smoking or coffee drinking.",
+      "replacement": "Results last six months to two years, depending on your oral care and habits like smoking or coffee.",
+      "reason": "Simplified for easier reading without loss of meaning."
+    },
+    {
+      "source": "If you\u2019re curious about whitening options or ready to get started, don\u2019t hesitate to reach out for a consultation.",
+      "replacement": "If you\u2019re interested in whitening options or ready to begin, contact us for a consultation.",
+      "reason": "Removed clich\u00e9d phrasing and simplified sentence."
+    }
+  ]
+}

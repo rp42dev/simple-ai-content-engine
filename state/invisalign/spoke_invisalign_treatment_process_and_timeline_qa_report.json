@@ -1,0 +1,57 @@
+{
+  "publish_ready": false,
+  "score": 69,
+  "compliance_level": "strict",
+  "publish_threshold": 85,
+  "summary": "Well-structured, informative article with clear explanation of Invisalign treatment process and timeline. Metadata is present and relevant. Minor issues noted with broken internal links and somewhat generic CTA language.",
+  "blockers": [
+    {
+      "issue": "Missing meta title",
+      "evidence": "Meta Title is blank or missing.",
+      "suggestion": "Provide a specific SEO title before publishing."
+    }
+  ],
+  "warnings": [
+    {
+      "issue": "AI-sounding hype phrasing",
+      "evidence": "revolutionized",
+      "suggestion": "Replace with plain, patient-friendly wording."
+    },
+    {
+      "issue": "Broken or placeholder-style internal links",
+      "evidence": "Links such as [initial consultation](spoke_invisalign_treatment_process_and_timeline.md) and [Invisalign retainers](spoke_invisalign_treatment_process_and_timeline.md) point to internal markdown filenames or placeholders rather than finalized URLs or anchors.",
+      "suggestion": "Replace internal links with proper URLs or anchor links that will work on the final publishing platform to ensure good user navigation."
+    },
+    {
+      "issue": "Generic CTA language and lack of localization",
+      "evidence": "The CTA 'Ready to start your smile journey? [Schedule a consultation](spoke_invisalign_treatment_process_and_timeline.md) today' is generic and lacks local clinic or contact details, making it less actionable.",
+      "suggestion": "Add specific clinic or contact info, location details, or at least a functional scheduling link to improve CTA effectiveness."
+    }
+  ],
+  "strengths": [
+    "Clear, logical structure with well-defined sections and subheadings",
+    "Comprehensive coverage of Invisalign treatment stages and timeline",
+    "Appropriate and relevant Meta Description that summarizes article content",
+    "Tone is professional and easy to understand without overly promotional or AI-sounding hype",
+    "Good explanation of technical terms and patient expectations"
+  ],
+  "suggested_edits": [
+    {
+      "severity": "medium",
+      "issue": "Internal links point to markdown files instead of final URLs",
+      "suggestion": "Update all internal links to functional URLs or anchor links suitable for the publishing platform."
+    },
+    {
+      "severity": "medium",
+      "issue": "CTA lacks specific business or location info, reducing conversion potential",
+      "suggestion": "Incorporate clinic name, location, phone number, or a direct scheduling link to strengthen the call to action."
+    },
+    {
+      "severity": "low",
+      "issue": "Slight content duplication between meta description and first paragraph",
+      "suggestion": "Consider minor variation or expansion in the opening paragraph to avoid verbatim repetition from the meta description."
+    }
+  ],
+  "article_name": "spoke_invisalign_treatment_process_and_timeline",
+  "output_file": "spoke_invisalign_treatment_process_and_timeline_final.md"
+}

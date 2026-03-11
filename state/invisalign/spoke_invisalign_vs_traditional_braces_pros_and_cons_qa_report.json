@@ -1,0 +1,48 @@
+{
+  "publish_ready": false,
+  "score": 69,
+  "compliance_level": "strict",
+  "publish_threshold": 85,
+  "summary": "The article on Invisalign vs traditional braces is well-structured, informative, and covers pros, cons, costs, and treatment timelines comprehensively. The meta description is present and relevant. The tone is professional and clear without overly promotional language. Some minor issues with internal linking to spoke articles which appear as placeholders but are consistent throughout and could be improved. No placeholder business or location text detected. CTA language is natural and appropriate. No major blockers present for publishing.",
+  "blockers": [
+    {
+      "issue": "Missing meta title",
+      "evidence": "Meta Title is blank or missing.",
+      "suggestion": "Provide a specific SEO title before publishing."
+    }
+  ],
+  "warnings": [
+    {
+      "issue": "Internal links to spoke articles appear as placeholders",
+      "evidence": "Links such as [Invisalign Treatment Process and Timeline](spoke_invisalign_treatment_process_and_timeline.md) contain file-name placeholders rather than fully qualified URLs.",
+      "suggestion": "Replace spoke article links with proper URLs or remove if not applicable to ensure user navigation is functional and not broken."
+    },
+    {
+      "issue": "No specific business or location information provided",
+      "evidence": "The article does not mention any clinic name, location, or contact details, which could reduce local relevance and user actionability.",
+      "suggestion": "Add business or location-specific details where applicable to increase local SEO and user engagement, if the content is intended for local clinic website use."
+    }
+  ],
+  "strengths": [
+    "Comprehensive coverage of Invisalign and traditional braces comparison including pros, cons, cost, and treatment duration",
+    "Clear, professional tone without hype or generic clich\u00e9s",
+    "Good structure with logical flow and section headings",
+    "Relevant and concise meta description that accurately reflects the article content",
+    "Balanced presentation enabling readers to make informed decisions",
+    "Natural and actionable CTAs without awkward or repetitive phrasing"
+  ],
+  "suggested_edits": [
+    {
+      "severity": "medium",
+      "issue": "Internal spoke article links use file-name placeholders",
+      "suggestion": "Update spoke article links to actual URLs or remove them if not supported by the publishing platform to avoid broken links."
+    },
+    {
+      "severity": "low",
+      "issue": "Lack of business or local location details",
+      "suggestion": "If this content is for a specific clinic or location, consider adding local identifiers or contact info to enhance relevance and user trust."
+    }
+  ],
+  "article_name": "spoke_invisalign_vs_traditional_braces_pros_and_cons",
+  "output_file": "spoke_invisalign_vs_traditional_braces_pros_and_cons_final.md"
+}

@@ -1,0 +1,72 @@
+{
+  "publish_ready": false,
+  "score": 69,
+  "compliance_level": "strict",
+  "publish_threshold": 85,
+  "summary": "The article provides comprehensive, well-structured content about Invisalign, but lacks clear business/location metadata and contains weak or generic CTAs. Some internal links reference spoke articles that may overlap slightly with pillar content. No placeholders were found, which is positive. The tone is generally natural, but certain phrases are slightly promotional or generic. Improvements in CTA specificity and inclusion of business/location details are needed before publishing.",
+  "blockers": [
+    {
+      "issue": "Missing meta title",
+      "evidence": "Meta Title is blank or missing.",
+      "suggestion": "Provide a specific SEO title before publishing."
+    },
+    {
+      "issue": "Missing meta description",
+      "evidence": "Meta Description is blank or missing.",
+      "suggestion": "Provide a specific meta description before publishing."
+    }
+  ],
+  "warnings": [
+    {
+      "issue": "AI-sounding hype phrasing",
+      "evidence": "revolutionized",
+      "suggestion": "Replace with plain, patient-friendly wording."
+    },
+    {
+      "issue": "AI-sounding Generic or Promotional Phrasing",
+      "evidence": "Phrases like 'Invisalign has revolutionized orthodontic treatment for many' and 'boost your confidence like never before' sound somewhat generic and hype-driven.",
+      "suggestion": "Consider moderating tone to be more factual and less promotional to improve authenticity."
+    },
+    {
+      "issue": "Possible Spoke Article Content Overlap",
+      "evidence": "Internal linking summary and linked anchor texts suggest some content overlap with spoke articles on treatment timelines and pros/cons, which might dilute the uniqueness of those subtopic pages.",
+      "suggestion": "Ensure spoke articles focus on deeper, more detailed treatment of assigned subtopics rather than replicating pillar-level content."
+    },
+    {
+      "issue": "Missing Business and Location Information",
+      "evidence": "No specific business name, clinic details, or location data provided anywhere in the article or metadata.",
+      "suggestion": "Add explicit business name, contact details, and geographic location to meet local SEO and user trust requirements."
+    },
+    {
+      "issue": "Weak CTA (Call to Action) Language",
+      "evidence": "Final CTA says: 'Ready to take the next step? Schedule a consultation with an Invisalign provider today and explore the clear path to your best smile!' without specifying how or where to schedule.",
+      "suggestion": "Include a direct instruction with contact info, booking link, or prompt tailored to the business/location for stronger user engagement."
+    }
+  ],
+  "strengths": [
+    "Comprehensive coverage of Invisalign including technology, benefits, cost, care, and FAQs.",
+    "Clear and logical article structure with descriptive headings.",
+    "Effective internal linking strategy to related spoke articles.",
+    "No placeholder text or dummy/localization issues present.",
+    "Metadata description is detailed and SEO relevant."
+  ],
+  "suggested_edits": [
+    {
+      "severity": "high",
+      "issue": "Lack of Business/Location Information in Metadata and Article",
+      "suggestion": "Add clinic or orthodontist practice name, location details, and contact info prominently for local relevance and improved SEO."
+    },
+    {
+      "severity": "medium",
+      "issue": "Weak and Generic Call to Action",
+      "suggestion": "Make the CTA concrete by providing a phone number, booking link, or directions on how to schedule a consultation."
+    },
+    {
+      "severity": "medium",
+      "issue": "Promotional Language and Slight AI-Style Phrasing",
+      "suggestion": "Tone down hype phrases to sound more neutral and professional to avoid sounding like generated content."
+    }
+  ],
+  "article_name": "article",
+  "output_file": "invisalign_pillar_final.md"
+}
