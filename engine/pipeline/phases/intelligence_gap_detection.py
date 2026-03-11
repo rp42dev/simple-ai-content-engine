@@ -4,6 +4,7 @@ from crews.content_crew import run_intelligence_crew
 from tools.state_manager import load_state, update_state
 
 from engine.pipeline.helpers import safe_slug
+from engine.pipeline.phase_logging import log_phase_skip
 
 INTELLIGENCE_MEMORY_ENV = "CREWAI_INTELLIGENCE_MEMORY_ENABLED"
 INTELLIGENCE_MEMORY_SCOPE_PREFIX = "/topic"
@@ -76,18 +77,18 @@ def run(queue):
         topic = item["topic"]
         state = load_state(topic)
         if state.get("intelligence_completed"):
-            print(f"Skipping Intelligence for {topic} (Completed)")
+            log_phase_skip("intelligence_gap_detection", topic, "completed")
             continue
 
         competitor_url = item.get("competitor_url")
         if not competitor_url:
-            print(f"Skipping Intelligence for {topic} (No competitor URL provided)")
+            log_phase_skip("intelligence_gap_detection", topic, "competitor_url_missing")
             continue
 
         topic_slug = safe_slug(topic)
         cluster_file = os.path.join("outputs", f"{topic_slug}_cluster.json")
         if not os.path.exists(cluster_file):
-            print(f"Skipping Intelligence for {topic} (Cluster data missing)")
+            log_phase_skip("intelligence_gap_detection", topic, "cluster_data_missing")
             continue
 
         print(f"Running intelligence for {topic} against: {competitor_url}")

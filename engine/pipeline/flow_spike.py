@@ -34,11 +34,11 @@ def _resolve_crewai_flow_symbols():
     return flow_cls, start, listen
 
 
-def _run_flow_spike(topic=None, limit=2, memory_enabled=False):
+def _run_flow_spike(topic=None, spoke_limit=2, topic_limit=None, cluster_size=6, memory_enabled=False):
     symbols = _resolve_crewai_flow_symbols()
     if not symbols:
         print("[Flow Spike] CrewAI Flow API not available; falling back to standard runner.")
-        run_pipeline(topic=topic, limit=limit)
+        run_pipeline(topic=topic, spoke_limit=spoke_limit, topic_limit=topic_limit, cluster_size=cluster_size)
         return
 
     print("[Flow Spike] Flow mode is enabled for architecture validation.")
@@ -46,13 +46,19 @@ def _run_flow_spike(topic=None, limit=2, memory_enabled=False):
         print("[Flow Spike] Memory mode is enabled (validation-only flag for future flow memory usage).")
 
     print("[Flow Spike] Running standard phase runner inside spike mode (non-breaking baseline).")
-    run_pipeline(topic=topic, limit=limit)
+    run_pipeline(topic=topic, spoke_limit=spoke_limit, topic_limit=topic_limit, cluster_size=cluster_size)
 
 
-def run_pipeline_entry(topic=None, limit=2):
+def run_pipeline_entry(topic=None, spoke_limit=2, topic_limit=None, cluster_size=6):
     config = load_flow_spike_config()
     if not config.flow_enabled:
-        run_pipeline(topic=topic, limit=limit)
+        run_pipeline(topic=topic, spoke_limit=spoke_limit, topic_limit=topic_limit, cluster_size=cluster_size)
         return
 
-    _run_flow_spike(topic=topic, limit=limit, memory_enabled=config.memory_enabled)
+    _run_flow_spike(
+        topic=topic,
+        spoke_limit=spoke_limit,
+        topic_limit=topic_limit,
+        cluster_size=cluster_size,
+        memory_enabled=config.memory_enabled,
+    )
